@@ -1,7 +1,10 @@
 #include <iostream>
 #include <queue>
 #include <unordered_set>
+#include <chrono> 
+
 using namespace std;
+using namespace std::chrono; 
 
 #define BOARD_WIDTH 4
 #define BOARD_HEIGHT 4
@@ -10,6 +13,9 @@ using namespace std;
 int BOARD[BOARD_HEIGHT][BOARD_WIDTH];
 bool populateBoard(int input[BOARD_HEIGHT][BOARD_WIDTH], int output[BOARD_HEIGHT][BOARD_WIDTH]);
 bool populateBoard(int input[]);
+high_resolution_clock::time_point start;
+high_resolution_clock::time_point stop;
+
 struct Point
 {
     int x;
@@ -129,18 +135,6 @@ BoardQueue goUp(BoardQueue input, BoardQueue output, Point emptySpot){
     return output;
 }
 
-
-// vector<Point> getAll(Point point)
-// {
-//     vector<Point> points;
-//     points.push_back(getUp(point));
-//     points.push_back(getDown(point));
-//     points.push_back(getRight(point));
-//     points.push_back(getLeft(point));
-//     return points;
-// }
-
-
 bool populateBoard(int input[]){
     int inputTracker = 0;
         for(int x = 0; x < BOARD_HEIGHT; x++)
@@ -213,43 +207,54 @@ bool contains(BoardQueue board)
         return false;
 }
 
-bool BFSFixUtil(queue<BoardQueue> boards)
+void printResult(BoardQueue board, int numNodesExplored){
+    cout << endl << "Moves: " << board.moves;
+    cout << endl << "Number of Nodes Expanded: " << numNodesExplored;
+    cout << endl << "Time Taken: " << ((duration_cast<milliseconds>(stop - start)).count())/(1000.000);
+    cout << endl;
+}
+
+bool BFSSolveUtil(queue<BoardQueue> boards)
 {
+    int numNodesExplored = 0;
     while(!boards.empty())
     {
         BoardQueue current = boards.front();
+        
         if(validateCorrectBoard(current.board)){
-            populateBoard(current.board,BOARD);
-            cout << endl << "The sequence of moves are " + current.moves << endl;
+            //GOAL STATE REACHED
+            stop = high_resolution_clock::now(); 
+            printResult(current, numNodesExplored);
             return true;
         } 
         BoardQueue moveBoard(current.emptySpot,current.board);
+        numNodesExplored++;
         boards.pop();
         if(getRight(current.emptySpot)){
             moveBoard = goRight(current,moveBoard,current.emptySpot);
             if(!contains(moveBoard)){
-                boards.push(BoardQueue(Point(current.emptySpot.x,current.emptySpot.y+1),moveBoard.board,current.moves+" R"));
+                boards.push(BoardQueue(Point(current.emptySpot.x,current.emptySpot.y+1),moveBoard.board,current.moves+"R"));
                 boardsVisted.insert(moveBoard);
             }
         }
         if(getLeft(current.emptySpot)){
             moveBoard = goLeft(current,moveBoard,current.emptySpot);
             if(!contains(moveBoard)){
-                boards.push(BoardQueue(Point(current.emptySpot.x,current.emptySpot.y-1),moveBoard.board,current.moves+" L"));
+                boards.push(BoardQueue(Point(current.emptySpot.x,current.emptySpot.y-1),moveBoard.board,current.moves+"L"));
                 boardsVisted.insert(moveBoard);
             }
         }
         if(getDown(current.emptySpot)){
             moveBoard = goDown(current,moveBoard,current.emptySpot);
             if(!contains(moveBoard)){
-                boards.push(BoardQueue(Point(current.emptySpot.x+1,current.emptySpot.y),moveBoard.board, current.moves+" D"));
+                boards.push(BoardQueue(Point(current.emptySpot.x+1,current.emptySpot.y),moveBoard.board, current.moves+"D"));
                 boardsVisted.insert(moveBoard);
             }
         }
         if(getUp(current.emptySpot)){
             moveBoard = goUp(current,moveBoard,current.emptySpot);
             if(!contains(moveBoard)){
-                boards.push(BoardQueue(Point(current.emptySpot.x-1,current.emptySpot.y),moveBoard.board,current.moves+" U"));
+                boards.push(BoardQueue(Point(current.emptySpot.x-1,current.emptySpot.y),moveBoard.board,current.moves+"U"));
                 boardsVisted.insert(moveBoard);
             }
         }
@@ -257,20 +262,19 @@ bool BFSFixUtil(queue<BoardQueue> boards)
     return false;
 }
 
-bool BFSFix()
+bool BFSSolve()
 {
     queue<BoardQueue> points;
     points.push(BoardQueue(getEmptySpot(),BOARD));
-    return BFSFixUtil(points);
+    return BFSSolveUtil(points);
 }
 
-
-
-int main(){
+int main(int argc, char *argv[]){
     int input[] = {1,0,2,4,5,7,3,8,9,6,11,12,13,10,14,15};
     populateBoard(input);
-    printBoard();
-    BFSFix();
-    printBoard();
+    // printBoard();
+    start = high_resolution_clock::now(); 
+    BFSSolve();
+    // printBoard();
     
 }
