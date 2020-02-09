@@ -2,6 +2,7 @@
 #include <queue>
 #include <unordered_set>
 #include <chrono> 
+#include <algorithm>
 
 using namespace std;
 using namespace std::chrono; 
