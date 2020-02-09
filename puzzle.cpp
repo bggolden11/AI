@@ -91,45 +91,44 @@ bool isValidPoint(Point point){
     return true;
 }
 
-bool getRight(Point point){
+bool validateRight(Point point){
     return isValidPoint(Point(point.x,point.y+1));
 }
 
-bool getLeft(Point point){
+bool validateLeft(Point point){
     return isValidPoint(Point(point.x,point.y-1));
 }
 
-bool getDown(Point point){
+bool validateDown(Point point){
     return isValidPoint(Point(point.x+1,point.y));
-   
 }
 
-bool getUp(Point point){
+bool validateUp(Point point){
     return isValidPoint(Point(point.x-1,point.y));
 }
 
-BoardQueue goRight(BoardQueue input, BoardQueue output, Point emptySpot){
+BoardQueue goRight(BoardQueue &input, BoardQueue &output, Point emptySpot){
     populateBoard(input.board, output.board);
     output.board[emptySpot.x][emptySpot.y] = input.board[emptySpot.x][emptySpot.y+1];
     output.board[emptySpot.x][emptySpot.y+1] = input.board[emptySpot.x][emptySpot.y];
     return output;
 }
 
-BoardQueue goLeft(BoardQueue input, BoardQueue output, Point emptySpot){
+BoardQueue goLeft(BoardQueue &input, BoardQueue &output, Point emptySpot){
     populateBoard(input.board, output.board);
     output.board[emptySpot.x][emptySpot.y] = input.board[emptySpot.x][emptySpot.y-1];
     output.board[emptySpot.x][emptySpot.y-1] = input.board[emptySpot.x][emptySpot.y];
     return output;
 }
 
-BoardQueue goDown(BoardQueue input, BoardQueue output, Point emptySpot){
+BoardQueue goDown(BoardQueue &input, BoardQueue &output, Point emptySpot){
     populateBoard(input.board, output.board);
     output.board[emptySpot.x][emptySpot.y] = input.board[emptySpot.x+1][emptySpot.y];
     output.board[emptySpot.x+1][emptySpot.y] = input.board[emptySpot.x][emptySpot.y];
     return output;
 }
 
-BoardQueue goUp(BoardQueue input, BoardQueue output, Point emptySpot){
+BoardQueue goUp(BoardQueue &input, BoardQueue &output, Point emptySpot){
     populateBoard(input.board, output.board);
     output.board[emptySpot.x][emptySpot.y] = input.board[emptySpot.x-1][emptySpot.y];
     output.board[emptySpot.x-1][emptySpot.y] = input.board[emptySpot.x][emptySpot.y];
@@ -200,7 +199,7 @@ bool validateCorrectBoard(int board[BOARD_HEIGHT][BOARD_WIDTH]){
             
 }
 
-bool contains(BoardQueue board)
+bool contains(BoardQueue &board)
 {
     if(boardsVisted.find(board)!=boardsVisted.end())
         return true;
@@ -208,14 +207,14 @@ bool contains(BoardQueue board)
         return false;
 }
 
-void printResult(BoardQueue board, int numNodesExplored){
+void printResult(BoardQueue &board, int numNodesExplored){
     cout << "Moves: " << *board.moves;
     cout << endl << "Number of Nodes Expanded: " << numNodesExplored;
     cout << endl << "Time Taken: " << ((duration_cast<milliseconds>(stop - start)).count())/(1000.000);
     cout << endl;
 }
 
-bool BFSSolveUtil(queue<BoardQueue> boards)
+bool BFSSolveUtil(queue<BoardQueue> &boards)
 {
     int numNodesExplored = 0;
     while(!boards.empty())
@@ -231,28 +230,29 @@ bool BFSSolveUtil(queue<BoardQueue> boards)
         BoardQueue moveBoard(current.emptySpot,current.board);
         numNodesExplored++;
         boards.pop();
-        if(getRight(current.emptySpot)){
+        if(validateRight(current.emptySpot)){
             moveBoard = goRight(current,moveBoard,current.emptySpot);
             if(!contains(moveBoard)){
                 boards.push(BoardQueue(Point(current.emptySpot.x,current.emptySpot.y+1),moveBoard.board,*current.moves +"R"));
                 boardsVisted.insert(moveBoard);
             }
         }
-        if(getLeft(current.emptySpot)){
+        if(validateLeft(current.emptySpot)){
             moveBoard = goLeft(current,moveBoard,current.emptySpot);
             if(!contains(moveBoard)){
                 boards.push(BoardQueue(Point(current.emptySpot.x,current.emptySpot.y-1),moveBoard.board,*current.moves+"L"));
                 boardsVisted.insert(moveBoard);
             }
         }
-        if(getDown(current.emptySpot)){
+        
+        if(validateDown(current.emptySpot)){
             moveBoard = goDown(current,moveBoard,current.emptySpot);
             if(!contains(moveBoard)){
                 boards.push(BoardQueue(Point(current.emptySpot.x+1,current.emptySpot.y),moveBoard.board, *current.moves+"D"));
                 boardsVisted.insert(moveBoard);
             }
         }
-        if(getUp(current.emptySpot)){
+        if(validateUp(current.emptySpot)){
             moveBoard = goUp(current,moveBoard,current.emptySpot);
             if(!contains(moveBoard)){
                 boards.push(BoardQueue(Point(current.emptySpot.x-1,current.emptySpot.y),moveBoard.board,*current.moves+"U"));
@@ -270,13 +270,24 @@ bool BFSSolve()
     return BFSSolveUtil(points);
 }
 
-int main(int argc, char* args[]){
-    int input[] = {1,0,2,4,5,7,3,8,9,6,11,12,13,10,14,15};
+int main(int argc, char* argv[]){
+    int input[16];
+    if(argc==1) 
+        printf("\nNo Extra Command Line Argument Passed Other Than Program Name"); 
+    if(argc == 17)
+    {
+        for(int i = 1; i <= 16; i++)
+            input[i-1] = atoi(argv[i]);
+    }
+    else
+    { 
+        printf("\nPlease input your sequence of numbered tiles for initial board configuration");
+        return 0;
+    } 
+
     populateBoard(input);
-    // printBoard();
     start = high_resolution_clock::now(); 
     BFSSolve();
     return 0;
-    // printBoard();
     
 }
