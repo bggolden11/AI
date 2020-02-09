@@ -269,7 +269,7 @@ bool BFSSolve()
     return BFSSolveUtil(points);
 }
 
-int main(int argc, char *argv[]){
+int main(){
     int input[] = {1,0,2,4,5,7,3,8,9,6,11,12,13,10,14,15};
     populateBoard(input);
     // printBoard();
