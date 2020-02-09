@@ -84,64 +84,49 @@ bool isValidPoint(Point point){
     return true;
 }
 
-bool getUp(Point point){
+bool getRight(Point point){
     return isValidPoint(Point(point.x,point.y+1));
 }
 
-bool getDown(Point point){
+bool getLeft(Point point){
     return isValidPoint(Point(point.x,point.y-1));
 }
 
-bool getRight(Point point){
+bool getDown(Point point){
     return isValidPoint(Point(point.x+1,point.y));
    
 }
 
-bool getLeft(Point point){
+bool getUp(Point point){
     return isValidPoint(Point(point.x-1,point.y));
-}
-
-BoardQueue goUp(BoardQueue input, BoardQueue output, Point emptySpot){
-    populateBoard(input.board, output.board);
-    if(getUp(emptySpot)){
-        output.board[emptySpot.x][emptySpot.y] = input.board[emptySpot.x][emptySpot.y+1];
-        output.board[emptySpot.x][emptySpot.y+1] = input.board[emptySpot.x][emptySpot.y];
-        return output;
-    }
-    else
-        return output;
-}
-
-BoardQueue goDown(BoardQueue input, BoardQueue output, Point emptySpot){
-    populateBoard(input.board, output.board);
-    if(getDown(emptySpot)){
-        output.board[emptySpot.x][emptySpot.y] = input.board[emptySpot.x][emptySpot.y-1];
-        output.board[emptySpot.x][emptySpot.y-1] = input.board[emptySpot.x][emptySpot.y];
-        return output;
-    }
-    else
-        return output;
 }
 
 BoardQueue goRight(BoardQueue input, BoardQueue output, Point emptySpot){
     populateBoard(input.board, output.board);
-    if(getRight(emptySpot)){
-        output.board[emptySpot.x][emptySpot.y] = input.board[emptySpot.x+1][emptySpot.y];
-        output.board[emptySpot.x+1][emptySpot.y] = input.board[emptySpot.x][emptySpot.y];
-        return output;
-    }
+    output.board[emptySpot.x][emptySpot.y] = input.board[emptySpot.x][emptySpot.y+1];
+    output.board[emptySpot.x][emptySpot.y+1] = input.board[emptySpot.x][emptySpot.y];
     return output;
 }
 
 BoardQueue goLeft(BoardQueue input, BoardQueue output, Point emptySpot){
     populateBoard(input.board, output.board);
-    if(getLeft(emptySpot)){
-        output.board[emptySpot.x][emptySpot.y] = input.board[emptySpot.x-1][emptySpot.y];
-        output.board[emptySpot.x-1][emptySpot.y] = input.board[emptySpot.x][emptySpot.y];
-        return output;
-    }
-    else
-        return output;
+    output.board[emptySpot.x][emptySpot.y] = input.board[emptySpot.x][emptySpot.y-1];
+    output.board[emptySpot.x][emptySpot.y-1] = input.board[emptySpot.x][emptySpot.y];
+    return output;
+}
+
+BoardQueue goDown(BoardQueue input, BoardQueue output, Point emptySpot){
+    populateBoard(input.board, output.board);
+    output.board[emptySpot.x][emptySpot.y] = input.board[emptySpot.x+1][emptySpot.y];
+    output.board[emptySpot.x+1][emptySpot.y] = input.board[emptySpot.x][emptySpot.y];
+    return output;
+}
+
+BoardQueue goUp(BoardQueue input, BoardQueue output, Point emptySpot){
+    populateBoard(input.board, output.board);
+    output.board[emptySpot.x][emptySpot.y] = input.board[emptySpot.x-1][emptySpot.y];
+    output.board[emptySpot.x-1][emptySpot.y] = input.board[emptySpot.x][emptySpot.y];
+    return output;
 }
 
 
@@ -240,29 +225,29 @@ bool BFSFixUtil(queue<BoardQueue> boards)
         } 
         BoardQueue moveBoard(current.emptySpot,current.board);
         boards.pop();
-        if(getUp(current.emptySpot)){
-            moveBoard = goUp(current,moveBoard,current.emptySpot);
+        if(getRight(current.emptySpot)){
+            moveBoard = goRight(current,moveBoard,current.emptySpot);
             if(!contains(moveBoard)){
                 boards.push(BoardQueue(Point(current.emptySpot.x,current.emptySpot.y+1),moveBoard.board,current.moves+" R"));
+                boardsVisted.insert(moveBoard);
+            }
+        }
+        if(getLeft(current.emptySpot)){
+            moveBoard = goLeft(current,moveBoard,current.emptySpot);
+            if(!contains(moveBoard)){
+                boards.push(BoardQueue(Point(current.emptySpot.x,current.emptySpot.y-1),moveBoard.board,current.moves+" L"));
                 boardsVisted.insert(moveBoard);
             }
         }
         if(getDown(current.emptySpot)){
             moveBoard = goDown(current,moveBoard,current.emptySpot);
             if(!contains(moveBoard)){
-                boards.push(BoardQueue(Point(current.emptySpot.x,current.emptySpot.y-1),moveBoard.board,current.moves+" L"));
-                boardsVisted.insert(moveBoard);
-            }
-        }
-        if(getRight(current.emptySpot)){
-            moveBoard = goRight(current,moveBoard,current.emptySpot);
-            if(!contains(moveBoard)){
                 boards.push(BoardQueue(Point(current.emptySpot.x+1,current.emptySpot.y),moveBoard.board, current.moves+" D"));
                 boardsVisted.insert(moveBoard);
             }
         }
-        if(getLeft(current.emptySpot)){
-            moveBoard = goLeft(current,moveBoard,current.emptySpot);
+        if(getUp(current.emptySpot)){
+            moveBoard = goUp(current,moveBoard,current.emptySpot);
             if(!contains(moveBoard)){
                 boards.push(BoardQueue(Point(current.emptySpot.x-1,current.emptySpot.y),moveBoard.board,current.moves+" U"));
                 boardsVisted.insert(moveBoard);
@@ -277,7 +262,6 @@ bool BFSFix()
     queue<BoardQueue> points;
     points.push(BoardQueue(getEmptySpot(),BOARD));
     return BFSFixUtil(points);
-    
 }
 
 
