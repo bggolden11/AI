@@ -37,18 +37,18 @@ class BoardQueue
     public:
     Point emptySpot;
     int board[BOARD_HEIGHT][BOARD_HEIGHT];
-    string moves;
+    string *moves;// =new string("");
     
     BoardQueue(Point emptySpot, int board[BOARD_HEIGHT][BOARD_WIDTH]){
         this->emptySpot = Point(emptySpot.x,emptySpot.y);
         populateBoard(board,this->board);
-        this->moves = "";
+        this->moves = new string("");
     }
 
     BoardQueue(Point emptySpot, int board[BOARD_HEIGHT][BOARD_WIDTH], string moves){
         this->emptySpot = Point(emptySpot.x,emptySpot.y);
         populateBoard(board,this->board);
-        this->moves = moves;
+        this->moves = new string(moves);
     }
 
     bool operator==(const BoardQueue& p) const
@@ -209,7 +209,7 @@ bool contains(BoardQueue board)
 }
 
 void printResult(BoardQueue board, int numNodesExplored){
-    cout << endl << "Moves: " << board.moves;
+    cout << "Moves: " << *board.moves;
     cout << endl << "Number of Nodes Expanded: " << numNodesExplored;
     cout << endl << "Time Taken: " << ((duration_cast<milliseconds>(stop - start)).count())/(1000.000);
     cout << endl;
@@ -234,28 +234,28 @@ bool BFSSolveUtil(queue<BoardQueue> boards)
         if(getRight(current.emptySpot)){
             moveBoard = goRight(current,moveBoard,current.emptySpot);
             if(!contains(moveBoard)){
-                boards.push(BoardQueue(Point(current.emptySpot.x,current.emptySpot.y+1),moveBoard.board,current.moves+"R"));
+                boards.push(BoardQueue(Point(current.emptySpot.x,current.emptySpot.y+1),moveBoard.board,*current.moves +"R"));
                 boardsVisted.insert(moveBoard);
             }
         }
         if(getLeft(current.emptySpot)){
             moveBoard = goLeft(current,moveBoard,current.emptySpot);
             if(!contains(moveBoard)){
-                boards.push(BoardQueue(Point(current.emptySpot.x,current.emptySpot.y-1),moveBoard.board,current.moves+"L"));
+                boards.push(BoardQueue(Point(current.emptySpot.x,current.emptySpot.y-1),moveBoard.board,*current.moves+"L"));
                 boardsVisted.insert(moveBoard);
             }
         }
         if(getDown(current.emptySpot)){
             moveBoard = goDown(current,moveBoard,current.emptySpot);
             if(!contains(moveBoard)){
-                boards.push(BoardQueue(Point(current.emptySpot.x+1,current.emptySpot.y),moveBoard.board, current.moves+"D"));
+                boards.push(BoardQueue(Point(current.emptySpot.x+1,current.emptySpot.y),moveBoard.board, *current.moves+"D"));
                 boardsVisted.insert(moveBoard);
             }
         }
         if(getUp(current.emptySpot)){
             moveBoard = goUp(current,moveBoard,current.emptySpot);
             if(!contains(moveBoard)){
-                boards.push(BoardQueue(Point(current.emptySpot.x-1,current.emptySpot.y),moveBoard.board,current.moves+"U"));
+                boards.push(BoardQueue(Point(current.emptySpot.x-1,current.emptySpot.y),moveBoard.board,*current.moves+"U"));
                 boardsVisted.insert(moveBoard);
             }
         }
@@ -270,12 +270,13 @@ bool BFSSolve()
     return BFSSolveUtil(points);
 }
 
-int main(){
+int main(int argc, char* args[]){
     int input[] = {1,0,2,4,5,7,3,8,9,6,11,12,13,10,14,15};
     populateBoard(input);
     // printBoard();
     start = high_resolution_clock::now(); 
     BFSSolve();
+    return 0;
     // printBoard();
     
 }
