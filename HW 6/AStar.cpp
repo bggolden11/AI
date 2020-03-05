@@ -1,0 +1,502 @@
+//
+// Created by Brian Goldenberg on 3/5/20.
+//
+
+#ifndef AIHW4_ASTAR_H
+#define AIHW4_ASTAR_H
+
+
+#include <iostream>
+#include <queue>
+#include <unordered_set>
+#include <chrono>
+#include <algorithm>
+
+using namespace std;
+using namespace std::chrono;
+
+#define BOARD_WIDTH 4
+#define BOARD_HEIGHT 4
+#define INPUT_SIZE 16
+
+int BOARD[BOARD_HEIGHT][BOARD_WIDTH];
+bool populateBoard(int input[BOARD_HEIGHT][BOARD_WIDTH], int output[BOARD_HEIGHT][BOARD_WIDTH]);
+bool populateBoard(int input[]);
+double Memory_Used_In_Bytes = 0.0;
+high_resolution_clock::time_point start;
+high_resolution_clock::time_point stop;
+
+class BoardQueue;
+
+int numberOfMisplacedTiles(BoardQueue b);
+int manhattanDistance(BoardQueue b);
+
+struct Point
+{
+    int x;
+    int y;
+    Point(int x, int y)
+    {
+        this->x = x;
+        this->y = y;
+    }
+    Point()
+    {
+        this->x = -1;
+        this->y = -1;
+    }
+};
+
+class BoardQueue
+{
+public:
+    Point emptySpot;
+    int board[BOARD_HEIGHT][BOARD_HEIGHT];
+    string *moves;
+
+    BoardQueue(Point emptySpot, int board[BOARD_HEIGHT][BOARD_WIDTH])
+    {
+        this->emptySpot = Point(emptySpot.x, emptySpot.y);
+        populateBoard(board, this->board);
+        this->moves = new string("");
+    }
+
+    BoardQueue(Point emptySpot, int board[BOARD_HEIGHT][BOARD_WIDTH], string moves)
+    {
+        this->emptySpot = Point(emptySpot.x, emptySpot.y);
+        populateBoard(board, this->board);
+        this->moves = new string(moves);
+    }
+
+    bool operator==(const BoardQueue &p) const
+    {
+        for (int x = 0; x < BOARD_HEIGHT; x++)
+        {
+            for (int y = 0; y < BOARD_WIDTH; y++)
+            {
+                if (board[x][y] != p.board[x][y])
+                    return false;
+            }
+        }
+        return true;
+    }
+
+};
+
+struct LessThanByMisPlacedTitles
+{
+    bool operator()(const BoardQueue& lhs, const BoardQueue& rhs) const
+    {
+        return numberOfMisplacedTiles(lhs) > numberOfMisplacedTiles(rhs);
+    }
+};
+struct LessThanMannhatanDistance
+{
+    bool operator()(const BoardQueue& lhs, const BoardQueue& rhs) const
+    {
+        return manhattanDistance(lhs) > manhattanDistance(rhs);
+    }
+};
+
+
+
+
+
+
+class MyHashFunction
+{
+public:
+    size_t operator()(const BoardQueue &p) const
+    {
+        int hashStorage = 0;
+        for (int x = 0; x < BOARD_HEIGHT; x++)
+        {
+            for (int y = 0; y < BOARD_WIDTH; y++)
+            {
+                hashStorage += (x * y * p.board[x][y]);
+            }
+        }
+        return hashStorage;
+    }
+};
+
+unordered_set<BoardQueue, MyHashFunction> boardsVisted;
+
+bool isValidPoint(Point point)
+{
+    if (point.x < 0 || point.x >= BOARD_WIDTH)
+        return false;
+    if (point.y < 0 || point.y >= BOARD_HEIGHT)
+        return false;
+    return true;
+}
+
+bool validateRight(Point point)
+{
+    return isValidPoint(Point(point.x, point.y + 1));
+}
+
+bool validateLeft(Point point)
+{
+    return isValidPoint(Point(point.x, point.y - 1));
+}
+
+bool validateDown(Point point)
+{
+    return isValidPoint(Point(point.x + 1, point.y));
+}
+
+bool validateUp(Point point)
+{
+    return isValidPoint(Point(point.x - 1, point.y));
+}
+
+BoardQueue goRight(BoardQueue &input, BoardQueue &output, Point emptySpot)
+{
+    populateBoard(input.board, output.board);
+    output.board[emptySpot.x][emptySpot.y] = input.board[emptySpot.x][emptySpot.y + 1];
+    output.board[emptySpot.x][emptySpot.y + 1] = input.board[emptySpot.x][emptySpot.y];
+    return output;
+}
+
+BoardQueue goLeft(BoardQueue &input, BoardQueue &output, Point emptySpot)
+{
+    populateBoard(input.board, output.board);
+    output.board[emptySpot.x][emptySpot.y] = input.board[emptySpot.x][emptySpot.y - 1];
+    output.board[emptySpot.x][emptySpot.y - 1] = input.board[emptySpot.x][emptySpot.y];
+    return output;
+}
+
+BoardQueue goDown(BoardQueue &input, BoardQueue &output, Point emptySpot)
+{
+    populateBoard(input.board, output.board);
+    output.board[emptySpot.x][emptySpot.y] = input.board[emptySpot.x + 1][emptySpot.y];
+    output.board[emptySpot.x + 1][emptySpot.y] = input.board[emptySpot.x][emptySpot.y];
+    return output;
+}
+
+BoardQueue goUp(BoardQueue &input, BoardQueue &output, Point emptySpot)
+{
+    populateBoard(input.board, output.board);
+    output.board[emptySpot.x][emptySpot.y] = input.board[emptySpot.x - 1][emptySpot.y];
+    output.board[emptySpot.x - 1][emptySpot.y] = input.board[emptySpot.x][emptySpot.y];
+    return output;
+}
+
+bool populateBoard(int input[])
+{
+    int inputTracker = 0;
+    for (int x = 0; x < BOARD_HEIGHT; x++)
+        for (int y = 0; y < BOARD_WIDTH; y++)
+        {
+            BOARD[x][y] = input[inputTracker];
+            inputTracker++;
+        }
+    return true;
+}
+
+bool populateBoard(int input[BOARD_HEIGHT][BOARD_WIDTH], int output[][BOARD_WIDTH])
+{
+    int **newBoard = 0;
+    newBoard = new int *[BOARD_HEIGHT];
+    for (int x = 0; x < BOARD_HEIGHT; x++)
+    {
+        newBoard[x] = new int[BOARD_WIDTH];
+        for (int y = 0; y < BOARD_WIDTH; y++)
+        {
+            output[x][y] = input[x][y];
+        }
+    }
+    return true;
+}
+
+void printBoard()
+{
+    for (int x = 0; x < BOARD_HEIGHT; x++)
+    {
+        for (int y = 0; y < BOARD_WIDTH; y++)
+        {
+            cout << BOARD[x][y] << " ";
+        }
+        cout << "\n";
+    }
+    return;
+}
+
+void printBoard(int input[BOARD_HEIGHT][BOARD_WIDTH])
+{
+    for (int x = 0; x < BOARD_HEIGHT; x++)
+    {
+        for (int y = 0; y < BOARD_WIDTH; y++)
+        {
+            cout << input[x][y] << " ";
+        }
+        cout << "\n";
+    }
+    return;
+}
+
+Point getEmptySpot()
+{
+    for (int x = 0; x < BOARD_HEIGHT; x++)
+        for (int y = 0; y < BOARD_WIDTH; y++)
+            if (BOARD[x][y] == 0)
+                return Point(x, y);
+    return Point(-1, -1);
+}
+Point getSpecificSpot(int b[4][4],int spot){
+    for (int x = 0; x < BOARD_HEIGHT; x++)
+        for (int y = 0; y < BOARD_WIDTH; y++)
+            if (b[x][y] == spot)
+                return Point(x, y);
+    return Point(-1, -1);
+}
+
+bool validateCorrectBoard(int board[BOARD_HEIGHT][BOARD_WIDTH])
+{
+    int correct[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0};
+    int correctCounter = 0;
+    for (int x = 0; x < BOARD_HEIGHT; x++)
+        for (int y = 0; y < BOARD_WIDTH; y++)
+        {
+            if (board[x][y] != correct[correctCounter])
+                return false;
+            correctCounter++;
+        }
+    return true;
+}
+
+bool contains(BoardQueue &board)
+{
+    if (boardsVisted.find(board) != boardsVisted.end())
+        return true;
+    else
+        return false;
+}
+
+void printResult(BoardQueue &board, int numNodesExplored)
+{
+    cout << "SOLVED!!";
+
+    cout << "Moves: " << *board.moves;
+    cout << endl
+         << "Number of Nodes Expanded: " << numNodesExplored;
+    cout << endl
+         << "Time Taken: " << ((duration_cast<milliseconds>(stop - start)).count()) / (1000.000);
+    cout << endl;
+}
+
+int _manhattanDistance(int x1, int y1, int x2, int y2){
+    return abs(x1 - x2) + abs(y1 - y2);
+}
+
+int manhattanDistance(BoardQueue b){
+    int correct[4][4] = {{1,2,3,4}, {5,6,7,8}, {9,10,11,12},{13,14,15,0}};
+
+    int distanceCount = 0;
+    for (int x = 0; x < BOARD_HEIGHT; x++)
+        for (int y = 0; y < BOARD_WIDTH; y++)
+        {
+            if (b.board[x][y] != 0) {
+                Point p = getSpecificSpot(b.board,b.board[x][y]);
+                Point c = getSpecificSpot(correct,b.board[x][y]);
+                distanceCount += _manhattanDistance(p.x,p.y,c.x,c.y);
+            }
+
+        }
+    return distanceCount;
+
+}
+
+
+
+int numberOfMisplacedTiles(BoardQueue b){
+    int correct[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0};
+    int numberOfIncorrectCounter = 0;
+    int correctCounterIterator = 0;
+    for (int x = 0; x < BOARD_HEIGHT; x++)
+        for (int y = 0; y < BOARD_WIDTH; y++)
+        {
+            if (b.board[x][y] != correct[correctCounterIterator])
+                numberOfIncorrectCounter++;
+            correctCounterIterator++;
+
+        }
+    return numberOfIncorrectCounter-1;
+}
+
+bool _AStar(priority_queue<BoardQueue, std::vector<BoardQueue>, LessThanByMisPlacedTitles> &boards)
+{
+    start = high_resolution_clock::now();
+    int numNodesExplored = 0;
+    while (!boards.empty())
+    {
+        BoardQueue current = boards.top();
+//        printBoard(current.board);
+//        cout << "----------------------" << endl;
+
+        if (validateCorrectBoard(current.board))
+        {
+            //GOAL STATE REACHED
+            stop = high_resolution_clock::now();
+            printResult(current, numNodesExplored);
+            return true;
+        }
+        BoardQueue moveBoard(current.emptySpot, current.board);
+        numNodesExplored++;
+        boards.pop();
+        if (validateRight(current.emptySpot))
+        {
+            moveBoard = goRight(current, moveBoard, current.emptySpot);
+            if (!contains(moveBoard))
+            {
+                boards.push(BoardQueue(Point(current.emptySpot.x, current.emptySpot.y + 1), moveBoard.board, *current.moves + "R"));
+                Memory_Used_In_Bytes += sizeof(BoardQueue(Point(current.emptySpot.x, current.emptySpot.y + 1), moveBoard.board, *current.moves + "R"));
+                boardsVisted.insert(moveBoard);
+            }
+        }
+        if (validateLeft(current.emptySpot))
+        {
+            moveBoard = goLeft(current, moveBoard, current.emptySpot);
+            if (!contains(moveBoard))
+            {
+                boards.push(BoardQueue(Point(current.emptySpot.x, current.emptySpot.y - 1), moveBoard.board, *current.moves + "L"));
+                Memory_Used_In_Bytes += sizeof(BoardQueue(Point(current.emptySpot.x, current.emptySpot.y - 1), moveBoard.board, *current.moves + "L"));
+                boardsVisted.insert(moveBoard);
+            }
+        }
+
+        if (validateDown(current.emptySpot))
+        {
+            moveBoard = goDown(current, moveBoard, current.emptySpot);
+            if (!contains(moveBoard))
+            {
+                boards.push(BoardQueue(Point(current.emptySpot.x + 1, current.emptySpot.y), moveBoard.board, *current.moves + "D"));
+                Memory_Used_In_Bytes += sizeof(BoardQueue(Point(current.emptySpot.x + 1, current.emptySpot.y), moveBoard.board, *current.moves + "D"));
+                boardsVisted.insert(moveBoard);
+            }
+        }
+        if (validateUp(current.emptySpot))
+        {
+            moveBoard = goUp(current, moveBoard, current.emptySpot);
+            if (!contains(moveBoard))
+            {
+                boards.push(BoardQueue(Point(current.emptySpot.x - 1, current.emptySpot.y), moveBoard.board, *current.moves + "U"));
+                Memory_Used_In_Bytes += sizeof(BoardQueue(Point(current.emptySpot.x - 1, current.emptySpot.y), moveBoard.board, *current.moves + "U"));
+                boardsVisted.insert(moveBoard);
+            }
+        }
+    }
+    return false;
+}
+
+bool _AStar2(priority_queue<BoardQueue, std::vector<BoardQueue>, LessThanMannhatanDistance> &boards)
+{
+    start = high_resolution_clock::now();
+    int numNodesExplored = 0;
+    while (!boards.empty())
+    {
+        BoardQueue current = boards.top();
+//        printBoard(current.board);
+
+        if (validateCorrectBoard(current.board))
+        {
+            //GOAL STATE REACHED
+            stop = high_resolution_clock::now();
+            printResult(current, numNodesExplored);
+            return true;
+        }
+        BoardQueue moveBoard(current.emptySpot, current.board);
+        numNodesExplored++;
+        boards.pop();
+        if (validateRight(current.emptySpot))
+        {
+            moveBoard = goRight(current, moveBoard, current.emptySpot);
+            if (!contains(moveBoard))
+            {
+                boards.push(BoardQueue(Point(current.emptySpot.x, current.emptySpot.y + 1), moveBoard.board, *current.moves + "R"));
+                Memory_Used_In_Bytes += sizeof(BoardQueue(Point(current.emptySpot.x, current.emptySpot.y + 1), moveBoard.board, *current.moves + "R"));
+                boardsVisted.insert(moveBoard);
+            }
+        }
+        if (validateLeft(current.emptySpot))
+        {
+            moveBoard = goLeft(current, moveBoard, current.emptySpot);
+            if (!contains(moveBoard))
+            {
+                boards.push(BoardQueue(Point(current.emptySpot.x, current.emptySpot.y - 1), moveBoard.board, *current.moves + "L"));
+                Memory_Used_In_Bytes += sizeof(BoardQueue(Point(current.emptySpot.x, current.emptySpot.y - 1), moveBoard.board, *current.moves + "L"));
+                boardsVisted.insert(moveBoard);
+            }
+        }
+
+        if (validateDown(current.emptySpot))
+        {
+            moveBoard = goDown(current, moveBoard, current.emptySpot);
+            if (!contains(moveBoard))
+            {
+                boards.push(BoardQueue(Point(current.emptySpot.x + 1, current.emptySpot.y), moveBoard.board, *current.moves + "D"));
+                Memory_Used_In_Bytes += sizeof(BoardQueue(Point(current.emptySpot.x + 1, current.emptySpot.y), moveBoard.board, *current.moves + "D"));
+                boardsVisted.insert(moveBoard);
+            }
+        }
+        if (validateUp(current.emptySpot))
+        {
+            moveBoard = goUp(current, moveBoard, current.emptySpot);
+            if (!contains(moveBoard))
+            {
+                boards.push(BoardQueue(Point(current.emptySpot.x - 1, current.emptySpot.y), moveBoard.board, *current.moves + "U"));
+                Memory_Used_In_Bytes += sizeof(BoardQueue(Point(current.emptySpot.x - 1, current.emptySpot.y), moveBoard.board, *current.moves + "U"));
+                boardsVisted.insert(moveBoard);
+            }
+        }
+    }
+    return false;
+}
+
+bool AStarSolveMisplacedBoards()
+{
+    priority_queue<BoardQueue, std::vector<BoardQueue>, LessThanByMisPlacedTitles> boardsMis;
+
+
+    boardsMis.push(BoardQueue(getEmptySpot(), BOARD));
+    Memory_Used_In_Bytes += sizeof(BoardQueue(getEmptySpot(), BOARD));
+    return _AStar(boardsMis);
+}
+
+bool AStarSolveManhattanDistance()
+{
+    priority_queue<BoardQueue, std::vector<BoardQueue>, LessThanMannhatanDistance> boardsMan;
+    boardsMan.push(BoardQueue(getEmptySpot(), BOARD));
+    Memory_Used_In_Bytes += sizeof(BoardQueue(getEmptySpot(), BOARD));
+    return _AStar2(boardsMan);
+}
+
+int main(int argc, char *argv[])
+{
+    int input[16];
+    if (argc == 1)
+        printf("\nNo Extra Command Line Argument Passed Other Than Program Name");
+    if (argc == 17)
+    {
+        for (int i = 1; i <= 16; i++)
+            input[i - 1] = atoi(argv[i]);
+    }
+    else
+    {
+        printf("\nPlease input your sequence of numbered tiles for initial board configuration");
+        return 0;
+    }
+
+    populateBoard(input);
+
+    AStarSolveMisplacedBoards();
+
+    populateBoard(input);
+
+    AStarSolveManhattanDistance();
+
+    cout << "Memory Used: " << Memory_Used_In_Bytes * .001 << "Kb\n";
+}
+
+#endif //AIHW4_ASTAR_H

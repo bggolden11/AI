@@ -48,10 +48,10 @@ RM = /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /Users/briangoldenberg/GitHub/AIHW4
+CMAKE_SOURCE_DIR = "/Users/briangoldenberg/GitHub/AIHW4/HW 6"
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /Users/briangoldenberg/GitHub/AIHW4/cmake-build-debug
+CMAKE_BINARY_DIR = "/Users/briangoldenberg/GitHub/AIHW4/HW 6/cmake-build-debug"
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -80,9 +80,9 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/briangoldenberg/GitHub/AIHW4/cmake-build-debug/CMakeFiles /Users/briangoldenberg/GitHub/AIHW4/cmake-build-debug/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start "/Users/briangoldenberg/GitHub/AIHW4/HW 6/cmake-build-debug/CMakeFiles" "/Users/briangoldenberg/GitHub/AIHW4/HW 6/cmake-build-debug/CMakeFiles/progress.marks"
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/briangoldenberg/GitHub/AIHW4/cmake-build-debug/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start "/Users/briangoldenberg/GitHub/AIHW4/HW 6/cmake-build-debug/CMakeFiles" 0
 .PHONY : all
 
 # The main clean target
@@ -111,71 +111,44 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named AIHW4
+# Target rules for targets named HW_6
 
 # Build rule for target.
-AIHW4: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 AIHW4
-.PHONY : AIHW4
+HW_6: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 HW_6
+.PHONY : HW_6
 
 # fast build rule for target.
-AIHW4/fast:
-	$(MAKE) -f CMakeFiles/AIHW4.dir/build.make CMakeFiles/AIHW4.dir/build
-.PHONY : AIHW4/fast
+HW_6/fast:
+	$(MAKE) -f CMakeFiles/HW_6.dir/build.make CMakeFiles/HW_6.dir/build
+.PHONY : HW_6/fast
 
-HW_5/IterativeDeepening.o: HW_5/IterativeDeepening.cpp.o
+AStar.o: AStar.cpp.o
 
-.PHONY : HW_5/IterativeDeepening.o
-
-# target to build an object file
-HW_5/IterativeDeepening.cpp.o:
-	$(MAKE) -f CMakeFiles/AIHW4.dir/build.make CMakeFiles/AIHW4.dir/HW_5/IterativeDeepening.cpp.o
-.PHONY : HW_5/IterativeDeepening.cpp.o
-
-HW_5/IterativeDeepening.i: HW_5/IterativeDeepening.cpp.i
-
-.PHONY : HW_5/IterativeDeepening.i
-
-# target to preprocess a source file
-HW_5/IterativeDeepening.cpp.i:
-	$(MAKE) -f CMakeFiles/AIHW4.dir/build.make CMakeFiles/AIHW4.dir/HW_5/IterativeDeepening.cpp.i
-.PHONY : HW_5/IterativeDeepening.cpp.i
-
-HW_5/IterativeDeepening.s: HW_5/IterativeDeepening.cpp.s
-
-.PHONY : HW_5/IterativeDeepening.s
-
-# target to generate assembly for a file
-HW_5/IterativeDeepening.cpp.s:
-	$(MAKE) -f CMakeFiles/AIHW4.dir/build.make CMakeFiles/AIHW4.dir/HW_5/IterativeDeepening.cpp.s
-.PHONY : HW_5/IterativeDeepening.cpp.s
-
-HW_6/AStar.o: HW_6/AStar.cpp.o
-
-.PHONY : HW_6/AStar.o
+.PHONY : AStar.o
 
 # target to build an object file
-HW_6/AStar.cpp.o:
-	$(MAKE) -f CMakeFiles/AIHW4.dir/build.make CMakeFiles/AIHW4.dir/HW_6/AStar.cpp.o
-.PHONY : HW_6/AStar.cpp.o
+AStar.cpp.o:
+	$(MAKE) -f CMakeFiles/HW_6.dir/build.make CMakeFiles/HW_6.dir/AStar.cpp.o
+.PHONY : AStar.cpp.o
 
-HW_6/AStar.i: HW_6/AStar.cpp.i
+AStar.i: AStar.cpp.i
 
-.PHONY : HW_6/AStar.i
+.PHONY : AStar.i
 
 # target to preprocess a source file
-HW_6/AStar.cpp.i:
-	$(MAKE) -f CMakeFiles/AIHW4.dir/build.make CMakeFiles/AIHW4.dir/HW_6/AStar.cpp.i
-.PHONY : HW_6/AStar.cpp.i
+AStar.cpp.i:
+	$(MAKE) -f CMakeFiles/HW_6.dir/build.make CMakeFiles/HW_6.dir/AStar.cpp.i
+.PHONY : AStar.cpp.i
 
-HW_6/AStar.s: HW_6/AStar.cpp.s
+AStar.s: AStar.cpp.s
 
-.PHONY : HW_6/AStar.s
+.PHONY : AStar.s
 
 # target to generate assembly for a file
-HW_6/AStar.cpp.s:
-	$(MAKE) -f CMakeFiles/AIHW4.dir/build.make CMakeFiles/AIHW4.dir/HW_6/AStar.cpp.s
-.PHONY : HW_6/AStar.cpp.s
+AStar.cpp.s:
+	$(MAKE) -f CMakeFiles/HW_6.dir/build.make CMakeFiles/HW_6.dir/AStar.cpp.s
+.PHONY : AStar.cpp.s
 
 # Help Target
 help:
@@ -185,13 +158,10 @@ help:
 	@echo "... depend"
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
-	@echo "... AIHW4"
-	@echo "... HW_5/IterativeDeepening.o"
-	@echo "... HW_5/IterativeDeepening.i"
-	@echo "... HW_5/IterativeDeepening.s"
-	@echo "... HW_6/AStar.o"
-	@echo "... HW_6/AStar.i"
-	@echo "... HW_6/AStar.s"
+	@echo "... HW_6"
+	@echo "... AStar.o"
+	@echo "... AStar.i"
+	@echo "... AStar.s"
 .PHONY : help
 
 

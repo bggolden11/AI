@@ -57,30 +57,45 @@ include CMakeFiles/AIHW4.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/AIHW4.dir/flags.make
 
-CMakeFiles/AIHW4.dir/IterativeDeepening.cpp.o: CMakeFiles/AIHW4.dir/flags.make
-CMakeFiles/AIHW4.dir/IterativeDeepening.cpp.o: ../IterativeDeepening.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/briangoldenberg/GitHub/AIHW4/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/AIHW4.dir/IterativeDeepening.cpp.o"
-	/Library/Developer/CommandLineTools/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/AIHW4.dir/IterativeDeepening.cpp.o -c /Users/briangoldenberg/GitHub/AIHW4/IterativeDeepening.cpp
+CMakeFiles/AIHW4.dir/HW_5/IterativeDeepening.cpp.o: CMakeFiles/AIHW4.dir/flags.make
+CMakeFiles/AIHW4.dir/HW_5/IterativeDeepening.cpp.o: ../HW\ 5/IterativeDeepening.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/briangoldenberg/GitHub/AIHW4/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/AIHW4.dir/HW_5/IterativeDeepening.cpp.o"
+	/Library/Developer/CommandLineTools/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/AIHW4.dir/HW_5/IterativeDeepening.cpp.o -c "/Users/briangoldenberg/GitHub/AIHW4/HW 5/IterativeDeepening.cpp"
 
-CMakeFiles/AIHW4.dir/IterativeDeepening.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/AIHW4.dir/IterativeDeepening.cpp.i"
-	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/briangoldenberg/GitHub/AIHW4/IterativeDeepening.cpp > CMakeFiles/AIHW4.dir/IterativeDeepening.cpp.i
+CMakeFiles/AIHW4.dir/HW_5/IterativeDeepening.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/AIHW4.dir/HW_5/IterativeDeepening.cpp.i"
+	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/Users/briangoldenberg/GitHub/AIHW4/HW 5/IterativeDeepening.cpp" > CMakeFiles/AIHW4.dir/HW_5/IterativeDeepening.cpp.i
 
-CMakeFiles/AIHW4.dir/IterativeDeepening.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/AIHW4.dir/IterativeDeepening.cpp.s"
-	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/briangoldenberg/GitHub/AIHW4/IterativeDeepening.cpp -o CMakeFiles/AIHW4.dir/IterativeDeepening.cpp.s
+CMakeFiles/AIHW4.dir/HW_5/IterativeDeepening.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/AIHW4.dir/HW_5/IterativeDeepening.cpp.s"
+	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/Users/briangoldenberg/GitHub/AIHW4/HW 5/IterativeDeepening.cpp" -o CMakeFiles/AIHW4.dir/HW_5/IterativeDeepening.cpp.s
+
+CMakeFiles/AIHW4.dir/HW_6/AStar.cpp.o: CMakeFiles/AIHW4.dir/flags.make
+CMakeFiles/AIHW4.dir/HW_6/AStar.cpp.o: ../HW\ 6/AStar.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/briangoldenberg/GitHub/AIHW4/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/AIHW4.dir/HW_6/AStar.cpp.o"
+	/Library/Developer/CommandLineTools/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/AIHW4.dir/HW_6/AStar.cpp.o -c "/Users/briangoldenberg/GitHub/AIHW4/HW 6/AStar.cpp"
+
+CMakeFiles/AIHW4.dir/HW_6/AStar.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/AIHW4.dir/HW_6/AStar.cpp.i"
+	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/Users/briangoldenberg/GitHub/AIHW4/HW 6/AStar.cpp" > CMakeFiles/AIHW4.dir/HW_6/AStar.cpp.i
+
+CMakeFiles/AIHW4.dir/HW_6/AStar.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/AIHW4.dir/HW_6/AStar.cpp.s"
+	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/Users/briangoldenberg/GitHub/AIHW4/HW 6/AStar.cpp" -o CMakeFiles/AIHW4.dir/HW_6/AStar.cpp.s
 
 # Object files for target AIHW4
 AIHW4_OBJECTS = \
-"CMakeFiles/AIHW4.dir/IterativeDeepening.cpp.o"
+"CMakeFiles/AIHW4.dir/HW_5/IterativeDeepening.cpp.o" \
+"CMakeFiles/AIHW4.dir/HW_6/AStar.cpp.o"
 
 # External object files for target AIHW4
 AIHW4_EXTERNAL_OBJECTS =
 
-AIHW4: CMakeFiles/AIHW4.dir/IterativeDeepening.cpp.o
+AIHW4: CMakeFiles/AIHW4.dir/HW_5/IterativeDeepening.cpp.o
+AIHW4: CMakeFiles/AIHW4.dir/HW_6/AStar.cpp.o
 AIHW4: CMakeFiles/AIHW4.dir/build.make
 AIHW4: CMakeFiles/AIHW4.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Users/briangoldenberg/GitHub/AIHW4/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable AIHW4"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Users/briangoldenberg/GitHub/AIHW4/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking CXX executable AIHW4"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/AIHW4.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

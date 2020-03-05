@@ -14,8 +14,8 @@ Sample Output:
     Time Taken: 0.004
     Memory Used: 83.44Kb
 
-The time output is in seconds. Also, I couldnt find a good library for getting c++ memory used so I'm using the sizeOF
+The time output is in seconds. Also, I couldn't find a good library for getting c++ memory used so I'm using the sizeOF
 operation to get the memory of each new node that is created and then converting the bytes to Kb.  
 
-Testing Envirement:
+Testing Environment:
 I wrote this code on OSX; however, I also tested it on systems4 which is a linux envirement.

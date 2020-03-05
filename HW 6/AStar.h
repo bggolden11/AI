@@ -1,3 +1,11 @@
+//
+// Created by Brian Goldenberg on 3/5/20.
+//
+
+#ifndef AIHW4_ASTAR_H
+#define AIHW4_ASTAR_H
+
+
 #include <iostream>
 #include <queue>
 #include <unordered_set>
@@ -9,20 +17,19 @@ using namespace std::chrono;
 
 #define BOARD_WIDTH 4
 #define BOARD_HEIGHT 4
-#define MAX_DEPTH 16000
+#define INPUT_SIZE 16
 
 int BOARD[BOARD_HEIGHT][BOARD_WIDTH];
 bool populateBoard(int input[BOARD_HEIGHT][BOARD_WIDTH], int output[BOARD_HEIGHT][BOARD_WIDTH]);
 bool populateBoard(int input[]);
 double Memory_Used_In_Bytes = 0.0;
-int numNodesExplored = 0;
 high_resolution_clock::time_point start;
 high_resolution_clock::time_point stop;
 
-/*
- *
- * Point class used for editing boards easily
- */
+class BoardQueue;
+
+int numberOfMisplacedTiles(BoardQueue b);
+
 struct Point
 {
     int x;
@@ -38,11 +45,7 @@ struct Point
         this->y = -1;
     }
 };
-//--------------------------------------------------------
 
-/*
- * BoardQueue Class used for storing board information easiely
- */
 class BoardQueue
 {
 public:
@@ -64,7 +67,6 @@ public:
         this->moves = new string(moves);
     }
 
-    // test whether boards are equivalent used for hashing the baord
     bool operator==(const BoardQueue &p) const
     {
         for (int x = 0; x < BOARD_HEIGHT; x++)
@@ -77,12 +79,19 @@ public:
         }
         return true;
     }
+
+
 };
 
-/*
- *
- * Simple hash function used for hashing the boards into a set for O(1) lookup and insert
- */
+struct LessThanByMisPlacedTitles
+{
+    bool operator()(const BoardQueue& lhs, const BoardQueue& rhs) const
+    {
+        return numberOfMisplacedTiles(lhs) < numberOfMisplacedTiles(rhs);
+    }
+};
+
+
 class MyHashFunction
 {
 public:
@@ -100,7 +109,6 @@ public:
     }
 };
 
-// hashset of boards queue already visted
 unordered_set<BoardQueue, MyHashFunction> boardsVisted;
 
 bool isValidPoint(Point point)
@@ -111,11 +119,7 @@ bool isValidPoint(Point point)
         return false;
     return true;
 }
-//-------------------------------------------
 
-/*
- * Valid function to ensure that the spot is a valid spot
- */
 bool validateRight(Point point)
 {
     return isValidPoint(Point(point.x, point.y + 1));
@@ -136,10 +140,6 @@ bool validateUp(Point point)
     return isValidPoint(Point(point.x - 1, point.y));
 }
 
-/*
- * ----------------------------------------------------------------------
- * Go function used to easily move points among board
- */
 BoardQueue goRight(BoardQueue &input, BoardQueue &output, Point emptySpot)
 {
     populateBoard(input.board, output.board);
@@ -171,10 +171,7 @@ BoardQueue goUp(BoardQueue &input, BoardQueue &output, Point emptySpot)
     output.board[emptySpot.x - 1][emptySpot.y] = input.board[emptySpot.x][emptySpot.y];
     return output;
 }
-//-----------------------------------------------
-/*
- * Populates baord according to the input
- */
+
 bool populateBoard(int input[])
 {
     int inputTracker = 0;
@@ -187,11 +184,6 @@ bool populateBoard(int input[])
     return true;
 }
 
-
-/*
- * Given input will alter the output board according to the input
- * HELPER FUNCTION
- */
 bool populateBoard(int input[BOARD_HEIGHT][BOARD_WIDTH], int output[][BOARD_WIDTH])
 {
     int **newBoard = 0;
@@ -207,9 +199,6 @@ bool populateBoard(int input[BOARD_HEIGHT][BOARD_WIDTH], int output[][BOARD_WIDT
     return true;
 }
 
-/*
- * Print board function used for testing and debugging
- */
 void printBoard()
 {
     for (int x = 0; x < BOARD_HEIGHT; x++)
@@ -222,10 +211,6 @@ void printBoard()
     }
     return;
 }
-
-/*
- * Print board according to given input
- */
 
 void printBoard(int input[BOARD_HEIGHT][BOARD_WIDTH])
 {
@@ -240,9 +225,6 @@ void printBoard(int input[BOARD_HEIGHT][BOARD_WIDTH])
     return;
 }
 
-/*
- * returns the empty spot according to global board variable
- */
 Point getEmptySpot()
 {
     for (int x = 0; x < BOARD_HEIGHT; x++)
@@ -251,10 +233,6 @@ Point getEmptySpot()
                 return Point(x, y);
     return Point(-1, -1);
 }
-
-/*
- * Validate whether the given board is correct
- */
 
 bool validateCorrectBoard(int board[BOARD_HEIGHT][BOARD_WIDTH])
 {
@@ -270,10 +248,6 @@ bool validateCorrectBoard(int board[BOARD_HEIGHT][BOARD_WIDTH])
     return true;
 }
 
-/*
- * Used to quickly whether a given baord is already within the board visted set.
- * I used this because some older version of c++ dont have the conain function for a hashset.
- */
 bool contains(BoardQueue &board)
 {
     if (boardsVisted.find(board) != boardsVisted.end())
@@ -282,10 +256,6 @@ bool contains(BoardQueue &board)
         return false;
 }
 
-//------------------------------------------------------------
-/*
- * Print the result of the search according to the rubric given
- */
 void printResult(BoardQueue &board, int numNodesExplored)
 {
     cout << "Moves: " << *board.moves;
@@ -296,96 +266,93 @@ void printResult(BoardQueue &board, int numNodesExplored)
     cout << endl;
 }
 
-/*
- * Main function for iterative depth first search
- */
-bool DLS(BoardQueue board, int limit){
+int numberOfMisplacedTiles(BoardQueue b){
+    int correct[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0};
+    int numberOfIncorrectCounter = 0;
+    int correctCounterIterator = 0;
+    for (int x = 0; x < BOARD_HEIGHT; x++)
+        for (int y = 0; y < BOARD_WIDTH; y++)
+        {
+            if (b.board[x][y] != correct[correctCounterIterator]) {
+                numberOfIncorrectCounter++;
+                correctCounterIterator++;
 
-    // validates whether the current board is correct
-    // return true if it has
-    if(validateCorrectBoard(board.board)){
-        stop = high_resolution_clock::now();
-        printResult(board, numNodesExplored);
-        return true;
-    }
-    //Checks whether the depth has been reached if it has return false
-    if(limit <= 0)
-        return false;
-
-    //increment the number of nodes explored
-    numNodesExplored++;
-
-    // Check whether the right spot is valid
-    // If it is move to that spot
-    // Check whether that board has been visited
-    BoardQueue moveBoard(board.emptySpot, board.board);
-    if(validateRight(board.emptySpot)){
-        moveBoard= goRight(board, moveBoard, board.emptySpot);
-        if(!contains(moveBoard)){
-            boardsVisted.insert(moveBoard);
-            // Recursive call to DLS with new board
-            // Decrement limit by 1
-            Memory_Used_In_Bytes += sizeof(BoardQueue(Point(board.emptySpot.x , board.emptySpot.y+1), moveBoard.board, *board.moves + "R"));
-            if(DLS(BoardQueue(Point(board.emptySpot.x, board.emptySpot.y+1), moveBoard.board, *board.moves + "R"), limit-1))
-                return true;
+            }
         }
-    }
-    //Similar pattern seen in 4 other directions below
-    if(validateLeft(board.emptySpot)){
-        moveBoard = goLeft(board, moveBoard, board.emptySpot);
-        if(!contains(moveBoard)){
-            boardsVisted.insert(moveBoard);
-            Memory_Used_In_Bytes += sizeof(BoardQueue(Point(board.emptySpot.x, board.emptySpot.y-1), moveBoard.board, *board.moves + "L"));
-            if(DLS(BoardQueue(Point(board.emptySpot.x, board.emptySpot.y-1), moveBoard.board, *board.moves + "L"), limit-1))
-                return true;
-        }
-    }
-    if(validateUp(board.emptySpot)){
-        moveBoard = goUp(board, moveBoard, board.emptySpot);
-        if(!contains(moveBoard)){
-            boardsVisted.insert(moveBoard);
-            Memory_Used_In_Bytes += sizeof(BoardQueue(Point(board.emptySpot.x - 1, board.emptySpot.y), moveBoard.board, *board.moves + "U"));
-            if(DLS(BoardQueue(Point(board.emptySpot.x - 1, board.emptySpot.y), moveBoard.board, *board.moves + "U"), limit-1))
-                return true;
-        }
-    }
-    if(validateDown(board.emptySpot)){
-        moveBoard = goDown(board, moveBoard, board.emptySpot);
-        if(!contains(moveBoard)){
-            boardsVisted.insert(moveBoard);
-            Memory_Used_In_Bytes += sizeof(BoardQueue(Point(board.emptySpot.x + 1, board.emptySpot.y), moveBoard.board, *board.moves + "D"));
-            if(DLS(BoardQueue(Point(board.emptySpot.x + 1, board.emptySpot.y), moveBoard.board, *board.moves + "D"), limit-1))
-                return true;
-        }
-    }
-    // Return false
-    // Valid board could not been found with the given depth
-    return false;
 }
 
-bool IDDFS(){
+bool _AStar(priority_queue<BoardQueue, std::vector<BoardQueue>, LessThanByMisPlacedTitles> &boards)
+{
     start = high_resolution_clock::now();
-    BoardQueue initalBoard = BoardQueue(getEmptySpot(), BOARD);
+    int numNodesExplored = 0;
+    while (!boards.empty())
+    {
+        BoardQueue current = boards.top();
 
-    for(int i=0; i < MAX_DEPTH; i++){
-        // Move through each depth until max depth is found
-        boardsVisted.insert(initalBoard);
-        if(DLS(initalBoard,i))
+        if (validateCorrectBoard(current.board))
         {
-            // Return true if the current depth was fioudn
+            //GOAL STATE REACHED
+            stop = high_resolution_clock::now();
+            printResult(current, numNodesExplored);
             return true;
         }
-    //clear boards visted
-    boardsVisted.clear();
-    }
+        BoardQueue moveBoard(current.emptySpot, current.board);
+        numNodesExplored++;
+        boards.pop();
+        if (validateRight(current.emptySpot))
+        {
+            moveBoard = goRight(current, moveBoard, current.emptySpot);
+            if (!contains(moveBoard))
+            {
+                boards.push(BoardQueue(Point(current.emptySpot.x, current.emptySpot.y + 1), moveBoard.board, *current.moves + "R"));
+                Memory_Used_In_Bytes += sizeof(BoardQueue(Point(current.emptySpot.x, current.emptySpot.y + 1), moveBoard.board, *current.moves + "R"));
+                boardsVisted.insert(moveBoard);
+            }
+        }
+        if (validateLeft(current.emptySpot))
+        {
+            moveBoard = goLeft(current, moveBoard, current.emptySpot);
+            if (!contains(moveBoard))
+            {
+                boards.push(BoardQueue(Point(current.emptySpot.x, current.emptySpot.y - 1), moveBoard.board, *current.moves + "L"));
+                Memory_Used_In_Bytes += sizeof(BoardQueue(Point(current.emptySpot.x, current.emptySpot.y - 1), moveBoard.board, *current.moves + "L"));
+                boardsVisted.insert(moveBoard);
+            }
+        }
 
-    //return false not valid board
+        if (validateDown(current.emptySpot))
+        {
+            moveBoard = goDown(current, moveBoard, current.emptySpot);
+            if (!contains(moveBoard))
+            {
+                boards.push(BoardQueue(Point(current.emptySpot.x + 1, current.emptySpot.y), moveBoard.board, *current.moves + "D"));
+                Memory_Used_In_Bytes += sizeof(BoardQueue(Point(current.emptySpot.x + 1, current.emptySpot.y), moveBoard.board, *current.moves + "D"));
+                boardsVisted.insert(moveBoard);
+            }
+        }
+        if (validateUp(current.emptySpot))
+        {
+            moveBoard = goUp(current, moveBoard, current.emptySpot);
+            if (!contains(moveBoard))
+            {
+                boards.push(BoardQueue(Point(current.emptySpot.x - 1, current.emptySpot.y), moveBoard.board, *current.moves + "U"));
+                Memory_Used_In_Bytes += sizeof(BoardQueue(Point(current.emptySpot.x - 1, current.emptySpot.y), moveBoard.board, *current.moves + "U"));
+                boardsVisted.insert(moveBoard);
+            }
+        }
+    }
     return false;
 }
 
+bool AStarSolve()
+{
+    priority_queue<BoardQueue, std::vector<BoardQueue>, LessThanByMisPlacedTitles> boards;
 
-//------------------------------------------
-// Driver function
+    boards.push(BoardQueue(getEmptySpot(), BOARD));
+    Memory_Used_In_Bytes += sizeof(BoardQueue(getEmptySpot(), BOARD));
+    return _AStar(boards);
+}
+
 int main(int argc, char *argv[])
 {
     int input[16];
@@ -404,7 +371,8 @@ int main(int argc, char *argv[])
 
     populateBoard(input);
 
-    IDDFS();
-
+    AStarSolve();
     cout << "Memory Used: " << Memory_Used_In_Bytes * .001 << "Kb\n";
 }
+
+#endif //AIHW4_ASTAR_H

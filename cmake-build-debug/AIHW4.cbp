@@ -80,7 +80,13 @@
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="/Users/briangoldenberg/GitHub/AIHW4/IterativeDeepening.cpp">
+		<Unit filename="/Users/briangoldenberg/GitHub/AIHW4/HW 5/IterativeDeepening.cpp">
+			<Option target="AIHW4"/>
+		</Unit>
+		<Unit filename="/Users/briangoldenberg/GitHub/AIHW4/HW 6/AStar.cpp">
+			<Option target="AIHW4"/>
+		</Unit>
+		<Unit filename="/Users/briangoldenberg/GitHub/AIHW4/HW 6/AStar.h">
 			<Option target="AIHW4"/>
 		</Unit>
 		<Unit filename="/Users/briangoldenberg/GitHub/AIHW4/CMakeLists.txt">
