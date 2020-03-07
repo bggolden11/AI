@@ -281,7 +281,7 @@ int numberOfMisplacedTiles(BoardQueue b){
         }
 }
 
-bool _AStar(priority_queue<BoardQueue, std::vector<BoardQueue>, LessThanByMisPlacedTitles> &boards)
+bool _AStarMisplacedTiles(priority_queue<BoardQueue, std::vector<BoardQueue>, LessThanByMisPlacedTitles> &boards)
 {
     start = high_resolution_clock::now();
     int numNodesExplored = 0;
@@ -350,7 +350,7 @@ bool AStarSolve()
 
     boards.push(BoardQueue(getEmptySpot(), BOARD));
     Memory_Used_In_Bytes += sizeof(BoardQueue(getEmptySpot(), BOARD));
-    return _AStar(boards);
+    return _AStarMisplacedTiles(boards);
 }
 
 int main(int argc, char *argv[])

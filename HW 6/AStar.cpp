@@ -31,6 +31,10 @@ class BoardQueue;
 int numberOfMisplacedTiles(BoardQueue b);
 int manhattanDistance(BoardQueue b);
 
+/*
+ *
+ * Point class used for editing boards easily
+ */
 struct Point
 {
     int x;
@@ -47,27 +51,48 @@ struct Point
     }
 };
 
+//--------------------------------------------------------
+
+/*
+ * BoardQueue Class used for storing board information easily
+ * Very similar to other implementation with addition of distanceFromOriginal
+ * to keep track of distance from original node to create the hueristic
+ */
 class BoardQueue
 {
 public:
     Point emptySpot;
     int board[BOARD_HEIGHT][BOARD_HEIGHT];
     string *moves;
+    int distanceFromOriginal;;
 
     BoardQueue(Point emptySpot, int board[BOARD_HEIGHT][BOARD_WIDTH])
     {
         this->emptySpot = Point(emptySpot.x, emptySpot.y);
         populateBoard(board, this->board);
         this->moves = new string("");
+        distanceFromOriginal = 0;
     }
+
 
     BoardQueue(Point emptySpot, int board[BOARD_HEIGHT][BOARD_WIDTH], string moves)
     {
         this->emptySpot = Point(emptySpot.x, emptySpot.y);
         populateBoard(board, this->board);
         this->moves = new string(moves);
+        distanceFromOriginal = 0;
     }
 
+    BoardQueue(Point emptySpot, int board[BOARD_HEIGHT][BOARD_WIDTH], string moves, int numberFromOriginal)
+    {
+        this->emptySpot = Point(emptySpot.x, emptySpot.y);
+        populateBoard(board, this->board);
+        this->moves = new string(moves);
+        this->distanceFromOriginal = numberFromOriginal;
+    }
+
+
+    // test whether boards are equivalent used for hashing the baord
     bool operator==(const BoardQueue &p) const
     {
         for (int x = 0; x < BOARD_HEIGHT; x++)
@@ -83,26 +108,28 @@ public:
 
 };
 
+
+//Implementation of both heuristics to for A* algorithm
+// Used later
 struct LessThanByMisPlacedTitles
 {
     bool operator()(const BoardQueue& lhs, const BoardQueue& rhs) const
     {
-        return numberOfMisplacedTiles(lhs) > numberOfMisplacedTiles(rhs);
+        return (numberOfMisplacedTiles(lhs) + lhs.distanceFromOriginal) > (numberOfMisplacedTiles(rhs) + rhs.distanceFromOriginal);
     }
 };
 struct LessThanMannhatanDistance
 {
     bool operator()(const BoardQueue& lhs, const BoardQueue& rhs) const
     {
-        return manhattanDistance(lhs) > manhattanDistance(rhs);
+        return (manhattanDistance(lhs)+ lhs.distanceFromOriginal) > (manhattanDistance(rhs) + rhs.distanceFromOriginal);
     }
 };
 
-
-
-
-
-
+/*
+ *
+ * Simple hash function used for hashing the boards into a set for O(1) lookup and insert
+ */
 class MyHashFunction
 {
 public:
@@ -120,6 +147,7 @@ public:
     }
 };
 
+// hashset of boards queue already visted
 unordered_set<BoardQueue, MyHashFunction> boardsVisted;
 
 bool isValidPoint(Point point)
@@ -131,6 +159,11 @@ bool isValidPoint(Point point)
     return true;
 }
 
+//-------------------------------------------
+
+/*
+ * Valid function to ensure that the spot is a valid spot
+ */
 bool validateRight(Point point)
 {
     return isValidPoint(Point(point.x, point.y + 1));
@@ -151,6 +184,11 @@ bool validateUp(Point point)
     return isValidPoint(Point(point.x - 1, point.y));
 }
 
+
+/*
+ * ----------------------------------------------------------------------
+ * Go function used to easily move points among board
+ */
 BoardQueue goRight(BoardQueue &input, BoardQueue &output, Point emptySpot)
 {
     populateBoard(input.board, output.board);
@@ -183,6 +221,10 @@ BoardQueue goUp(BoardQueue &input, BoardQueue &output, Point emptySpot)
     return output;
 }
 
+//-----------------------------------------------
+/*
+ * Populates baord according to the input
+ */
 bool populateBoard(int input[])
 {
     int inputTracker = 0;
@@ -195,6 +237,11 @@ bool populateBoard(int input[])
     return true;
 }
 
+
+/*
+ * Given input will alter the output board according to the input
+ * HELPER FUNCTION
+ */
 bool populateBoard(int input[BOARD_HEIGHT][BOARD_WIDTH], int output[][BOARD_WIDTH])
 {
     int **newBoard = 0;
@@ -210,6 +257,9 @@ bool populateBoard(int input[BOARD_HEIGHT][BOARD_WIDTH], int output[][BOARD_WIDT
     return true;
 }
 
+/*
+ * Print board function used for testing and debugging
+ */
 void printBoard()
 {
     for (int x = 0; x < BOARD_HEIGHT; x++)
@@ -223,6 +273,10 @@ void printBoard()
     return;
 }
 
+
+/*
+ * Print board according to given input
+ */
 void printBoard(int input[BOARD_HEIGHT][BOARD_WIDTH])
 {
     for (int x = 0; x < BOARD_HEIGHT; x++)
@@ -236,6 +290,9 @@ void printBoard(int input[BOARD_HEIGHT][BOARD_WIDTH])
     return;
 }
 
+/*
+ * returns the empty spot according to global board variable
+ */
 Point getEmptySpot()
 {
     for (int x = 0; x < BOARD_HEIGHT; x++)
@@ -244,6 +301,10 @@ Point getEmptySpot()
                 return Point(x, y);
     return Point(-1, -1);
 }
+
+/*
+ * Returns spot of specific number
+ */
 Point getSpecificSpot(int b[4][4],int spot){
     for (int x = 0; x < BOARD_HEIGHT; x++)
         for (int y = 0; y < BOARD_WIDTH; y++)
@@ -252,6 +313,9 @@ Point getSpecificSpot(int b[4][4],int spot){
     return Point(-1, -1);
 }
 
+/*
+ * Validate whether the given board is correct
+ */
 bool validateCorrectBoard(int board[BOARD_HEIGHT][BOARD_WIDTH])
 {
     int correct[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0};
@@ -266,6 +330,10 @@ bool validateCorrectBoard(int board[BOARD_HEIGHT][BOARD_WIDTH])
     return true;
 }
 
+/*
+ * Used to quickly whether a given baord is already within the board visted set.
+ * I used this because some older version of c++ dont have the conain function for a hashset.
+ */
 bool contains(BoardQueue &board)
 {
     if (boardsVisted.find(board) != boardsVisted.end())
@@ -274,10 +342,12 @@ bool contains(BoardQueue &board)
         return false;
 }
 
+//------------------------------------------------------------
+/*
+ * Print the result of the search according to the rubric given
+ */
 void printResult(BoardQueue &board, int numNodesExplored)
 {
-    cout << "SOLVED!!";
-
     cout << "Moves: " << *board.moves;
     cout << endl
          << "Number of Nodes Expanded: " << numNodesExplored;
@@ -286,10 +356,23 @@ void printResult(BoardQueue &board, int numNodesExplored)
     cout << endl;
 }
 
+/**
+ *
+ * @param x1 X cordinate one to compare
+ * @param y1 Y cordinate one to compare
+ * @param x2 X cordinate two to compare
+ * @param y2 Y cordinate two to compare
+ * @return The manhattan distance of these cordinates
+ */
 int _manhattanDistance(int x1, int y1, int x2, int y2){
     return abs(x1 - x2) + abs(y1 - y2);
 }
 
+/**
+ *
+ * @param b board to get manhattan distance for
+ * @return manhattan distance of board compared to valid board
+ */
 int manhattanDistance(BoardQueue b){
     int correct[4][4] = {{1,2,3,4}, {5,6,7,8}, {9,10,11,12},{13,14,15,0}};
 
@@ -309,7 +392,11 @@ int manhattanDistance(BoardQueue b){
 }
 
 
-
+/**
+ *
+ * @param b boad to get number of misplaced tiles
+ * @return number of misplaced tiles compared to orginal board
+ */
 int numberOfMisplacedTiles(BoardQueue b){
     int correct[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0};
     int numberOfIncorrectCounter = 0;
@@ -325,7 +412,12 @@ int numberOfMisplacedTiles(BoardQueue b){
     return numberOfIncorrectCounter-1;
 }
 
-bool _AStar(priority_queue<BoardQueue, std::vector<BoardQueue>, LessThanByMisPlacedTitles> &boards)
+/**
+ *
+ * @param boards priority quue to be analyzed
+ * @return boolean as to whether misplaced tile path was found
+ */
+bool _AStarMisplacedTiles(priority_queue<BoardQueue, std::vector<BoardQueue>, LessThanByMisPlacedTitles> &boards)
 {
     start = high_resolution_clock::now();
     int numNodesExplored = 0;
@@ -345,12 +437,13 @@ bool _AStar(priority_queue<BoardQueue, std::vector<BoardQueue>, LessThanByMisPla
         BoardQueue moveBoard(current.emptySpot, current.board);
         numNodesExplored++;
         boards.pop();
+        int currentNumberFromOriginal = current.distanceFromOriginal;
         if (validateRight(current.emptySpot))
         {
             moveBoard = goRight(current, moveBoard, current.emptySpot);
             if (!contains(moveBoard))
             {
-                boards.push(BoardQueue(Point(current.emptySpot.x, current.emptySpot.y + 1), moveBoard.board, *current.moves + "R"));
+                boards.push(BoardQueue(Point(current.emptySpot.x, current.emptySpot.y + 1), moveBoard.board, *current.moves + "R", currentNumberFromOriginal +1));
                 Memory_Used_In_Bytes += sizeof(BoardQueue(Point(current.emptySpot.x, current.emptySpot.y + 1), moveBoard.board, *current.moves + "R"));
                 boardsVisted.insert(moveBoard);
             }
@@ -360,7 +453,7 @@ bool _AStar(priority_queue<BoardQueue, std::vector<BoardQueue>, LessThanByMisPla
             moveBoard = goLeft(current, moveBoard, current.emptySpot);
             if (!contains(moveBoard))
             {
-                boards.push(BoardQueue(Point(current.emptySpot.x, current.emptySpot.y - 1), moveBoard.board, *current.moves + "L"));
+                boards.push(BoardQueue(Point(current.emptySpot.x, current.emptySpot.y - 1), moveBoard.board, *current.moves + "L", currentNumberFromOriginal +1));
                 Memory_Used_In_Bytes += sizeof(BoardQueue(Point(current.emptySpot.x, current.emptySpot.y - 1), moveBoard.board, *current.moves + "L"));
                 boardsVisted.insert(moveBoard);
             }
@@ -371,7 +464,7 @@ bool _AStar(priority_queue<BoardQueue, std::vector<BoardQueue>, LessThanByMisPla
             moveBoard = goDown(current, moveBoard, current.emptySpot);
             if (!contains(moveBoard))
             {
-                boards.push(BoardQueue(Point(current.emptySpot.x + 1, current.emptySpot.y), moveBoard.board, *current.moves + "D"));
+                boards.push(BoardQueue(Point(current.emptySpot.x + 1, current.emptySpot.y), moveBoard.board, *current.moves + "D", currentNumberFromOriginal +1));
                 Memory_Used_In_Bytes += sizeof(BoardQueue(Point(current.emptySpot.x + 1, current.emptySpot.y), moveBoard.board, *current.moves + "D"));
                 boardsVisted.insert(moveBoard);
             }
@@ -381,7 +474,7 @@ bool _AStar(priority_queue<BoardQueue, std::vector<BoardQueue>, LessThanByMisPla
             moveBoard = goUp(current, moveBoard, current.emptySpot);
             if (!contains(moveBoard))
             {
-                boards.push(BoardQueue(Point(current.emptySpot.x - 1, current.emptySpot.y), moveBoard.board, *current.moves + "U"));
+                boards.push(BoardQueue(Point(current.emptySpot.x - 1, current.emptySpot.y), moveBoard.board, *current.moves + "U", currentNumberFromOriginal +1));
                 Memory_Used_In_Bytes += sizeof(BoardQueue(Point(current.emptySpot.x - 1, current.emptySpot.y), moveBoard.board, *current.moves + "U"));
                 boardsVisted.insert(moveBoard);
             }
@@ -390,12 +483,18 @@ bool _AStar(priority_queue<BoardQueue, std::vector<BoardQueue>, LessThanByMisPla
     return false;
 }
 
-bool _AStar2(priority_queue<BoardQueue, std::vector<BoardQueue>, LessThanMannhatanDistance> &boards)
+/**
+ *
+ * @param boards priority quque based off of manhattan distance
+ * @return true or false
+ */
+bool _AStarManhattanDistance(priority_queue<BoardQueue, std::vector<BoardQueue>, LessThanMannhatanDistance> &boards)
 {
     start = high_resolution_clock::now();
     int numNodesExplored = 0;
     while (!boards.empty())
     {
+
         BoardQueue current = boards.top();
 //        printBoard(current.board);
 
@@ -406,6 +505,7 @@ bool _AStar2(priority_queue<BoardQueue, std::vector<BoardQueue>, LessThanMannhat
             printResult(current, numNodesExplored);
             return true;
         }
+        int currentNumberFromOriginal = current.distanceFromOriginal;
         BoardQueue moveBoard(current.emptySpot, current.board);
         numNodesExplored++;
         boards.pop();
@@ -414,7 +514,7 @@ bool _AStar2(priority_queue<BoardQueue, std::vector<BoardQueue>, LessThanMannhat
             moveBoard = goRight(current, moveBoard, current.emptySpot);
             if (!contains(moveBoard))
             {
-                boards.push(BoardQueue(Point(current.emptySpot.x, current.emptySpot.y + 1), moveBoard.board, *current.moves + "R"));
+                boards.push(BoardQueue(Point(current.emptySpot.x, current.emptySpot.y + 1), moveBoard.board, *current.moves + "R", currentNumberFromOriginal +1));
                 Memory_Used_In_Bytes += sizeof(BoardQueue(Point(current.emptySpot.x, current.emptySpot.y + 1), moveBoard.board, *current.moves + "R"));
                 boardsVisted.insert(moveBoard);
             }
@@ -424,7 +524,7 @@ bool _AStar2(priority_queue<BoardQueue, std::vector<BoardQueue>, LessThanMannhat
             moveBoard = goLeft(current, moveBoard, current.emptySpot);
             if (!contains(moveBoard))
             {
-                boards.push(BoardQueue(Point(current.emptySpot.x, current.emptySpot.y - 1), moveBoard.board, *current.moves + "L"));
+                boards.push(BoardQueue(Point(current.emptySpot.x, current.emptySpot.y - 1), moveBoard.board, *current.moves + "L", currentNumberFromOriginal +1));
                 Memory_Used_In_Bytes += sizeof(BoardQueue(Point(current.emptySpot.x, current.emptySpot.y - 1), moveBoard.board, *current.moves + "L"));
                 boardsVisted.insert(moveBoard);
             }
@@ -435,7 +535,7 @@ bool _AStar2(priority_queue<BoardQueue, std::vector<BoardQueue>, LessThanMannhat
             moveBoard = goDown(current, moveBoard, current.emptySpot);
             if (!contains(moveBoard))
             {
-                boards.push(BoardQueue(Point(current.emptySpot.x + 1, current.emptySpot.y), moveBoard.board, *current.moves + "D"));
+                boards.push(BoardQueue(Point(current.emptySpot.x + 1, current.emptySpot.y), moveBoard.board, *current.moves + "D", currentNumberFromOriginal +1));
                 Memory_Used_In_Bytes += sizeof(BoardQueue(Point(current.emptySpot.x + 1, current.emptySpot.y), moveBoard.board, *current.moves + "D"));
                 boardsVisted.insert(moveBoard);
             }
@@ -445,12 +545,13 @@ bool _AStar2(priority_queue<BoardQueue, std::vector<BoardQueue>, LessThanMannhat
             moveBoard = goUp(current, moveBoard, current.emptySpot);
             if (!contains(moveBoard))
             {
-                boards.push(BoardQueue(Point(current.emptySpot.x - 1, current.emptySpot.y), moveBoard.board, *current.moves + "U"));
+                boards.push(BoardQueue(Point(current.emptySpot.x - 1, current.emptySpot.y), moveBoard.board, *current.moves + "U", currentNumberFromOriginal +1));
                 Memory_Used_In_Bytes += sizeof(BoardQueue(Point(current.emptySpot.x - 1, current.emptySpot.y), moveBoard.board, *current.moves + "U"));
                 boardsVisted.insert(moveBoard);
             }
         }
     }
+
     return false;
 }
 
@@ -461,15 +562,16 @@ bool AStarSolveMisplacedBoards()
 
     boardsMis.push(BoardQueue(getEmptySpot(), BOARD));
     Memory_Used_In_Bytes += sizeof(BoardQueue(getEmptySpot(), BOARD));
-    return _AStar(boardsMis);
+    return _AStarMisplacedTiles(boardsMis);
 }
 
 bool AStarSolveManhattanDistance()
 {
     priority_queue<BoardQueue, std::vector<BoardQueue>, LessThanMannhatanDistance> boardsMan;
+
     boardsMan.push(BoardQueue(getEmptySpot(), BOARD));
     Memory_Used_In_Bytes += sizeof(BoardQueue(getEmptySpot(), BOARD));
-    return _AStar2(boardsMan);
+    return _AStarManhattanDistance(boardsMan);
 }
 
 int main(int argc, char *argv[])
@@ -490,13 +592,23 @@ int main(int argc, char *argv[])
 
     populateBoard(input);
 
+    cout << endl << "RESULT FOR MISPLACED TILES" << endl <<  "---------------------" << endl;
     AStarSolveMisplacedBoards();
+    cout << "Memory Used: " << Memory_Used_In_Bytes * .001 << "Kb\n";
+
+    Memory_Used_In_Bytes = 0.0;
+
+
 
     populateBoard(input);
+    boardsVisted.clear();
+
+    cout << endl << "RESULT FOR MANHATTAN DISTANCE";
+    cout << endl << "---------------------" << endl;
 
     AStarSolveManhattanDistance();
 
     cout << "Memory Used: " << Memory_Used_In_Bytes * .001 << "Kb\n";
 }
 
-#endif //AIHW4_ASTAR_H
+#endif //AIHW6_ASTAR_H
