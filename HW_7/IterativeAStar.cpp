@@ -29,6 +29,7 @@ bool populateBoard(int input[]);
 double Memory_Used_In_Bytes = 0.0;
 high_resolution_clock::time_point start;
 high_resolution_clock::time_point stop;
+int numberOfNodesExplored = 0;
 
 class BoardQueue;
 
@@ -431,8 +432,6 @@ int numberOfMisplacedTiles(BoardQueue b){
  */
 bool _AStarMisplacedTiles(priority_queue<BoardQueue, std::vector<BoardQueue>, LessThanByMisPlacedTitles> &boards, int depth, int &minManDist)
 {
-    start = high_resolution_clock::now();
-    int numNodesExplored = 0;
     while (!boards.empty())
     {
         BoardQueue current = boards.top();
@@ -529,8 +528,7 @@ bool _AStarMisplacedTiles(priority_queue<BoardQueue, std::vector<BoardQueue>, Le
  */
 bool _AStarManhattanDistance(priority_queue<BoardQueue, std::vector<BoardQueue>, LessThanMannhatanDistance> &boards, int depth, int &minManDist)
 {
-    start = high_resolution_clock::now();
-    int numNodesExplored = 0;
+    
     while (!boards.empty())
     {
 
@@ -620,6 +618,8 @@ bool _AStarManhattanDistance(priority_queue<BoardQueue, std::vector<BoardQueue>,
 
 bool AStarSolveMisplacedBoards()
 {
+    start = high_resolution_clock::now();
+    numberOfNodesExplored = 0;
     priority_queue<BoardQueue, std::vector<BoardQueue>, LessThanByMisPlacedTitles> boardsMis;
 
     Memory_Used_In_Bytes += sizeof(BoardQueue(getEmptySpot(), BOARD));
@@ -642,6 +642,9 @@ bool AStarSolveMisplacedBoards()
 
 bool AStarSolveManhattanDistance()
 {
+    start = high_resolution_clock::now();
+    numberOfNodesExplored = 0;
+
     priority_queue<BoardQueue, std::vector<BoardQueue>, LessThanMannhatanDistance> boardsMis;
 
 
