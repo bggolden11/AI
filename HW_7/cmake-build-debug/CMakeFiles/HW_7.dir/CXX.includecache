@@ -1,0 +1,20 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/briangoldenberg/GitHub/AI/HW_7/IterativeAStar.cpp
+iostream
+-
+queue
+-
+unordered_set
+-
+chrono
+-
+algorithm
+-
+
