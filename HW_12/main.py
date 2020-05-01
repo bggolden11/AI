@@ -5,6 +5,8 @@ from DecisionTree import DecisionTreeNode
 import math
 
 
+## Unused method
+## Built for proof of concept
 def manualTest(attributeToTree, r):
     key_max = max(attributeToTree.keys(), key=(lambda k: attributeToTree[k].calculateChildrenGain(calculateT(r))))
     finalRoot = attributeToTree[key_max]
@@ -157,6 +159,7 @@ def filterRestuarant(current, r, data):
     return r
 
 
+## Main Driver method
 def computeTree(r, _attributeToTree, attributeToTree, root, count):
     key_max = max(_attributeToTree.keys(), key=(lambda k: _attributeToTree[k].calculateChildrenGain(calculateT(r))))
 
@@ -191,13 +194,13 @@ def main():
     attributeToTree = makeTree(r)
     global finalRoot
     finalRoot = None
-    
+
     print("Compute and print tree")
     print("##----------------------------------------##")
 
     finalRoot = computeTree(r, attributeToTree, attributeToTree, finalRoot, 0)
 
-    print(finalRoot.prettyPrint())
+    print(finalRoot.pprint_tree(finalRoot))
 
     print("##----------------------------------------##")
 

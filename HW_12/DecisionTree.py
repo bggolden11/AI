@@ -10,11 +10,13 @@ class DecisionTreeRoot(object):
     def __str__(self) -> str:
         return str(self.data) + " = " + str(self.entropy)
 
-    def prettyPrint(self, level=0):
-        ret = "\t" * level + repr(self.data) + "\n"
-        for child in self.children:
-            ret += child.prettyPrint(level + 1)
-        return ret
+    def pprint_tree(self, node, file=None, _prefix="", _last=True):
+        print(_prefix, "`- " if _last else "|- ", node.data, sep="", file=file)
+        _prefix += "   " if _last else "|  "
+        child_count = len(node.children)
+        for i, child in enumerate(node.children):
+            _last = i == (child_count - 1)
+            self.pprint_tree(child, file, _prefix, _last)
 
     # B(q) = −(q log2 q + (1 − q)log2(1 − q))
     def calcB(self, q):
@@ -98,8 +100,10 @@ class DecisionTreeNode(object):
             self.noToWillWait) + " proporition = " + str(self.yesToWillWaitProportion) + " OTher proporition " + str(
             self.noToWillWaitProportion) + " Entropy = " + str(self.entropy)
 
-    def prettyPrint(self, level=0):
-        ret = "\t" * level + repr(self.data) + "\n"
-        for child in self.children:
-            ret += child.prettyPrint(level + 1)
-        return ret
+    def pprint_tree(self, node, file=None, _prefix="", _last=True):
+        print(_prefix, "`- " if _last else "|- ", node.data, sep="", file=file)
+        _prefix += "   " if _last else "|  "
+        child_count = len(node.children)
+        for i, child in enumerate(node.children):
+            _last = i == (child_count - 1)
+            self.pprint_tree(child, file, _prefix, _last)
