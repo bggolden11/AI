@@ -5,7 +5,7 @@ from DecisionTree import DecisionTreeNode
 import math
 
 
-def manualTest(attributeToTree,r):
+def manualTest(attributeToTree, r):
     key_max = max(attributeToTree.keys(), key=(lambda k: attributeToTree[k].calculateChildrenGain(calculateT(r))))
     finalRoot = attributeToTree[key_max]
     for child in finalRoot.children:
@@ -48,7 +48,6 @@ def manualTest(attributeToTree,r):
                                   key=(lambda k: attributeToTree[k].calculateChildrenGain(calculateT(r))))
                     child.children = [attributeToTree[key_max]]
                     for child in child.children[0].children:
-                        print(child)
                         if child.yesToWillWait == 0 or child.noToWillWait == 0:
                             if child.yesToWillWait > child.noToWillWait:
                                 child.children = [DecisionTreeNode("YES")]
@@ -61,9 +60,8 @@ def manualTest(attributeToTree,r):
                             key_max = max(attributeToTree.keys(),
                                           key=(lambda k: attributeToTree[k].calculateChildrenGain(calculateT(r))))
                             child.children = [attributeToTree[key_max]]
-
-                    print(key_max)
     return finalRoot
+
 
 def toBoolean(s: str):
     s.strip()
@@ -120,11 +118,6 @@ def buildTreeFromRoot(restaurant, attribute):
     return root
 
 
-def calculateAllEntropy(attributeToTree):
-    for root in attributeToTree.values():
-        root.calculateChildrenEntropy
-
-
 def calculateT(restaurants: [Restuarant]):
     totalNumber: float = 0
     totalPos: float = 0
@@ -133,51 +126,6 @@ def calculateT(restaurants: [Restuarant]):
             totalPos += 1
         totalNumber += 1
     return totalPos / totalNumber
-
-
-def calculateChildren(currentRoot: DecisionTreeRoot, attributeToTree, r):
-    if len(attributeToTree) == 1:
-        return
-
-    for i in range(len(currentRoot.children)):
-        if currentRoot.children[i].yesToWillWaitProportion == 1 or currentRoot.children[i].yesToWillWaitProportion == 1:
-            print(currentRoot.children[i].data)
-            current = currentRoot.data
-            if current == "pat":
-                r = list(filter(lambda x: x.pat != currentRoot.children[i].data, r))
-            if current == "est":
-                r = list(filter(lambda x: x.est != currentRoot.children[i].data, r))
-            if current == "hun":
-                r = list(filter(lambda x: x.hun != currentRoot.children[i].data, r))
-            if current == "type":
-                r = list(filter(lambda x: x.type != currentRoot.children[i].data, r))
-            if current == "fri":
-                r = list(filter(lambda x: x.fri != currentRoot.children[i].data, r))
-            if current == "rain":
-                r = list(filter(lambda x: x.rain != currentRoot.children[i].data, r))
-            if current == "res":
-                r = list(filter(lambda x: x.res != currentRoot.children[i].data, r))
-            if current == "bar":
-                r = list(filter(lambda x: x.bar != currentRoot.children[i].data, r))
-
-        if currentRoot.children[i].entropy != 1 and currentRoot.children[i].entropy != 0:
-            key_max = max(attributeToTree.keys(),
-                          key=(lambda k: attributeToTree[k].calculateChildrenGain(calculateT(r))))
-            currentRoot.children[i].children = [attributeToTree[key_max]]
-
-            attributeToTree = {"altTree": buildTreeFromRoot(r, "alt"), "bar": buildTreeFromRoot(r, "bar"),
-                               "friTree": buildTreeFromRoot(r, "fri"),
-                               "hunTree": buildTreeFromRoot(r, "hun"), "patTree": buildTreeFromRoot(r, "pat"),
-                               "priceTree": buildTreeFromRoot(r, "price"), "rainTree": buildTreeFromRoot(r, "rain"),
-                               "resTree": buildTreeFromRoot(r, "res"), "typeTree": buildTreeFromRoot(r, "type"),
-                               "estTree": buildTreeFromRoot(r, "est")}
-            finalRoot.prettyPrint()
-            # calculateChildren(currentRoot.children[i].children[0], attributeToTree, r)
-        else:
-            if currentRoot.children[i].yesToWillWaitProportion > currentRoot.children[i].noToWillWaitProportion:
-                currentRoot.children[i].children = [DecisionTreeNode("YES")]
-            else:
-                currentRoot.children[i].children = [DecisionTreeNode("NO")]
 
 
 def makeTree(r):
@@ -189,10 +137,7 @@ def makeTree(r):
             "estTree": buildTreeFromRoot(r, "est")}
 
 
-
-
 def filterRestuarant(current, r, data):
-    print("test")
     if current == "pat":
         r = list(filter(lambda x: x.pat != data, r))
     if current == "est":
@@ -212,106 +157,49 @@ def filterRestuarant(current, r, data):
     return r
 
 
-def compute(r, _attributeToTree, attributeToTree, root, count):
-
-    if count == 1:
-        # print(root.prettyPrint)
-        print("test")
+def computeTree(r, _attributeToTree, attributeToTree, root, count):
     key_max = max(_attributeToTree.keys(), key=(lambda k: _attributeToTree[k].calculateChildrenGain(calculateT(r))))
 
     root = _attributeToTree[key_max]
 
     for child in root.children:
-        print(child)
         if child.yesToWillWait == 0 or child.noToWillWait == 0:
-            if root.data == 'hun':
-                print("tesdt")
             r = filterRestuarant(root.data, r, child.data)
-            print(r)
             if child.yesToWillWait > child.noToWillWait:
                 child.children = [DecisionTreeNode("YES")]
             else:
                 child.children = [DecisionTreeNode("NO")]
-    # if len(root.children) != len(attributeToTree[root.data]):
-    #     for child in attributeToTree[root.data].children:
-    #         if not root.children.__contains__(child):
-    #             if
+    if len(root.children) != len(attributeToTree[str(root.data) + "Tree"].children):
+        for child in attributeToTree[str(root.data) + "Tree"].children:
+            if not any(child.data == u.data for u in root.children):
+                Node = DecisionTreeNode(child.data)
+                Node.children = [DecisionTreeNode("YES")]
+                root.children.append(Node)
     for child in root.children:
         if child.yesToWillWait != 0 and child.noToWillWait != 0:
             _attributeToTree = makeTree(r)
             key_max = max(_attributeToTree.keys(),
                           key=(lambda k: _attributeToTree[k].calculateChildrenGain(calculateT(r))))
-            # child.children = [attributeToTree[key_max]]
-            count+=1
-            # print(child.prettyPrint())
-            temp = child
-            # print(child.children[0])
-            child.children = [compute(r, _attributeToTree, attributeToTree, child.children, count)]
+            count += 1
+
+            child.children = [computeTree(r, _attributeToTree, attributeToTree, child.children, count)]
     return root
 
 
 def main():
     r = parse()
-    print(" ---------")
-    # altTree =
-    attributeToTree = {"altTree": buildTreeFromRoot(r, "alt"), "bar": buildTreeFromRoot(r, "bar"),
-                       "friTree": buildTreeFromRoot(r, "fri"),
-                       "hunTree": buildTreeFromRoot(r, "hun"), "patTree": buildTreeFromRoot(r, "pat"),
-                       "priceTree": buildTreeFromRoot(r, "price"), "rainTree": buildTreeFromRoot(r, "rain"),
-                       "resTree": buildTreeFromRoot(r, "res"), "typeTree": buildTreeFromRoot(r, "type"),
-                       "estTree": buildTreeFromRoot(r, "est")}
-
-    print("##INIAL##")
-    for a in attributeToTree.values():
-        for c in a.children:
-            print(c)
-    print("##INIAL##")
-
-    key_max = max(attributeToTree.keys(), key=(lambda k: attributeToTree[k].calculateChildrenGain(calculateT(r))))
-
-    for root in attributeToTree.values():
-        print(root.data + " " + str(root.calculateChildrenGain(calculateT(r))))
-
-    print(key_max)
-    # print("-------------------")
-    # r = list(filter(lambda x: x.pat != "None" and x.pat != "Some", r))
-    #
-    # print("SIZE " + str(len(r)))
-    #
-    # print("##SECOND##")
-    # attributeToTree = {"altTree": buildTreeFromRoot(r, "alt"), "bar": buildTreeFromRoot(r, "bar"),
-    #                    "friTree": buildTreeFromRoot(r, "fri"),
-    #                    "hunTree": buildTreeFromRoot(r, "hun"), "patTree": buildTreeFromRoot(r, "pat"),
-    #                    "priceTree": buildTreeFromRoot(r, "price"), "rainTree": buildTreeFromRoot(r, "rain"),
-    #                    "resTree": buildTreeFromRoot(r, "res"), "typeTree": buildTreeFromRoot(r, "type"),
-    #                    "estTree": buildTreeFromRoot(r, "est")}
-    #
-    # print("##SECOND##")
-    # for a in attributeToTree.values():
-    #     for c in a.children:
-    #         print(c)
-    # print("##SECOND##")
+    attributeToTree = makeTree(r)
     global finalRoot
     finalRoot = None
-    # finalRoot = manualTest(attributeToTree,r)
-    # = None
+    
+    print("Compute and print tree")
+    print("##----------------------------------------##")
 
-    # for root in attributeToTree.values():
-    #     print(root.data + " " + str(root.calculateChildrenGain(calculateT(r))))
-    finalRoot = compute(r, attributeToTree, attributeToTree, finalRoot, 0)
-
+    finalRoot = computeTree(r, attributeToTree, attributeToTree, finalRoot, 0)
 
     print(finalRoot.prettyPrint())
 
-    # r = list(filter(lambda x: x.pat != "None" and x.pat != "Some", r))
-    print("-------------")
-
-    # calculateChildren(finalRoot, attributeToTree, r)
-    #
-    # print(finalRoot.prettyPrint())
-    # print("HELLO")
-    # for root in attributeToTree.values():
-    #     print(root.data + " " + str(root.calculateChildrenGain(calculateT(r))))
+    print("##----------------------------------------##")
 
 
 if __name__ == "__main__":

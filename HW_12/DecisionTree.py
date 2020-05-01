@@ -99,8 +99,6 @@ class DecisionTreeNode(object):
             self.noToWillWaitProportion) + " Entropy = " + str(self.entropy)
 
     def prettyPrint(self, level=0):
-        if len(self.children) == 0:
-            print("done")
         ret = "\t" * level + repr(self.data) + "\n"
         for child in self.children:
             ret += child.prettyPrint(level + 1)
