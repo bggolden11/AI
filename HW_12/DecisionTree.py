@@ -11,12 +11,22 @@ class DecisionTreeRoot(object):
         return str(self.data) + " = " + str(self.entropy)
 
     def pprint_tree(self, node, file=None, _prefix="", _last=True):
-        print(_prefix, "`- " if _last else "|- ", node.data, sep="", file=file)
+        if node.data is None:
+            return
+
+        if isinstance(node.data,bool):
+            if node.data:
+                print(_prefix, "`- " if _last else "|- ", "Yes", sep="", file=file)
+            elif not node.data:
+                print(_prefix, "`- " if _last else "|- ", "No", sep="", file=file)
+        else:
+            print(_prefix, "`- " if _last else "|- ", node.data, sep="", file=file)
         _prefix += "   " if _last else "|  "
         child_count = len(node.children)
         for i, child in enumerate(node.children):
             _last = i == (child_count - 1)
-            self.pprint_tree(child, file, _prefix, _last)
+            if child.data is not None:
+                self.pprint_tree(child, file, _prefix, _last)
 
     # B(q) = −(q log2 q + (1 − q)log2(1 − q))
     def calcB(self, q):
@@ -99,11 +109,3 @@ class DecisionTreeNode(object):
         return str(self.data) + " yesToWillWait = " + str(self.yesToWillWait) + " noToWillWait = " + str(
             self.noToWillWait) + " proporition = " + str(self.yesToWillWaitProportion) + " OTher proporition " + str(
             self.noToWillWaitProportion) + " Entropy = " + str(self.entropy)
-
-    def pprint_tree(self, node, file=None, _prefix="", _last=True):
-        print(_prefix, "`- " if _last else "|- ", node.data, sep="", file=file)
-        _prefix += "   " if _last else "|  "
-        child_count = len(node.children)
-        for i, child in enumerate(node.children):
-            _last = i == (child_count - 1)
-            self.pprint_tree(child, file, _prefix, _last)
