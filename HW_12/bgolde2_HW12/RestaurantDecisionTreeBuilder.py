@@ -150,8 +150,7 @@ def computeTree(r, currentAttributeToTree, listOfAllAttributeToTree, root, count
             child.children = [computeTree(r, currentAttributeToTree, listOfAllAttributeToTree, child.children, count)]
     return root
 
-
-# -----------------------------------------------------------
+#-----------------------------------------------------------
 
 
 # * MAIN FUNCTION

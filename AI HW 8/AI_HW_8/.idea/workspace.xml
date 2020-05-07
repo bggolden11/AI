@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="d5eafd7e-c057-4cdc-b54c-01bdb92dd50d" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CodeStyleSettingsInfer">
+    <option name="done" value="true" />
+  </component>
+  <component name="ComposerSettings">
+    <execution>
+      <executable />
+    </execution>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectCodeStyleSettingsMigration">
+    <option name="version" value="1" />
+  </component>
+  <component name="ProjectId" id="1ZvBiqYjdDFuxmwRRKi7YZ2eitZ" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+    <option name="showMembers" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
+    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.2" />
+    <property name="settings.editor.selected.configurable" value="configurable.group.editor" />
+  </component>
+  <component name="RunManager" selected="Application.Main">
+    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Main" />
+      <module name="AI_HW_8" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Dockerfile" type="docker-deploy" factoryName="dockerfile" temporary="true">
+      <deployment type="dockerfile">
+        <settings>
+          <option name="sourceFilePath" value="Dockerfile" />
+        </settings>
+      </deployment>
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.Main" />
+        <item itemvalue="Docker.Dockerfile" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SbtLocalSettings">
+    <option name="projectSyncType">
+      <map>
+        <entry key="$PROJECT_DIR$/../jeremy_laier_project" value="PREVIEW" />
+      </map>
+    </option>
+  </component>
+  <component name="ServiceViewManager">
+    <option name="viewStates">
+      <list>
+        <serviceView>
+          <treeState>
+            <expand />
+            <select />
+          </treeState>
+        </serviceView>
+      </list>
+    </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="d5eafd7e-c057-4cdc-b54c-01bdb92dd50d" name="Default Changelist" comment="" />
+      <created>1585709817401</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1585709817401</updated>
+      <workItem from="1585709819988" duration="4026000" />
+      <workItem from="1585750004112" duration="63368000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="415" y="3" key="#Dockerfile" timestamp="1585839483776">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="415" y="3" key="#Dockerfile/0.0.1440.900@0.0.1440.900" timestamp="1585839483776" />
+    <state x="320" y="115" key="#Project_Structure" timestamp="1585710979971">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="320" y="115" key="#Project_Structure/0.0.1440.900@0.0.1440.900" timestamp="1585710979971" />
+    <state x="184" y="112" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1585839561277">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="184" y="112" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1440.900@0.0.1440.900" timestamp="1585839561277" />
+    <state x="533" y="173" key="#com.intellij.ide.util.MemberChooser" timestamp="1585867604339">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="533" y="173" key="#com.intellij.ide.util.MemberChooser/0.0.1440.900@0.0.1440.900" timestamp="1585867604339" />
+    <state x="486" y="316" width="467" height="276" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.classes" timestamp="1585885688080">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="486" y="316" width="467" height="276" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.classes/0.0.1440.900@0.0.1440.900" timestamp="1585885688080" />
+    <state width="1398" height="280" key="GridCell.Tab.0.bottom" timestamp="1585893179129">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state width="1398" height="280" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1585893179129" />
+    <state width="1398" height="384" key="GridCell.Tab.0.bottom/0.23.1440.831@0.23.1440.831" timestamp="1585872720977" />
+    <state width="1398" height="280" key="GridCell.Tab.0.center" timestamp="1585893179128">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state width="1398" height="280" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1585893179128" />
+    <state width="1398" height="384" key="GridCell.Tab.0.center/0.23.1440.831@0.23.1440.831" timestamp="1585872720975" />
+    <state width="1398" height="280" key="GridCell.Tab.0.left" timestamp="1585893179127">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state width="1398" height="280" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1585893179127" />
+    <state width="1398" height="384" key="GridCell.Tab.0.left/0.23.1440.831@0.23.1440.831" timestamp="1585872720975" />
+    <state width="1398" height="280" key="GridCell.Tab.0.right" timestamp="1585893179128">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state width="1398" height="280" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1585893179128" />
+    <state width="1398" height="384" key="GridCell.Tab.0.right/0.23.1440.831@0.23.1440.831" timestamp="1585872720976" />
+    <state width="1398" height="210" key="GridCell.Tab.1.bottom" timestamp="1585887552426">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state width="1398" height="210" key="GridCell.Tab.1.bottom/0.0.1440.900@0.0.1440.900" timestamp="1585887552426" />
+    <state width="1398" height="384" key="GridCell.Tab.1.bottom/0.23.1440.831@0.23.1440.831" timestamp="1585872721302" />
+    <state width="1398" height="210" key="GridCell.Tab.1.center" timestamp="1585887552424">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state width="1398" height="210" key="GridCell.Tab.1.center/0.0.1440.900@0.0.1440.900" timestamp="1585887552424" />
+    <state width="1398" height="384" key="GridCell.Tab.1.center/0.23.1440.831@0.23.1440.831" timestamp="1585872721300" />
+    <state width="1398" height="210" key="GridCell.Tab.1.left" timestamp="1585887552423">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state width="1398" height="210" key="GridCell.Tab.1.left/0.0.1440.900@0.0.1440.900" timestamp="1585887552423" />
+    <state width="1398" height="384" key="GridCell.Tab.1.left/0.23.1440.831@0.23.1440.831" timestamp="1585872721299" />
+    <state width="1398" height="210" key="GridCell.Tab.1.right" timestamp="1585887552425">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state width="1398" height="210" key="GridCell.Tab.1.right/0.0.1440.900@0.0.1440.900" timestamp="1585887552425" />
+    <state width="1398" height="384" key="GridCell.Tab.1.right/0.23.1440.831@0.23.1440.831" timestamp="1585872721301" />
+    <state x="221" y="23" width="1024" height="831" key="SettingsEditor" timestamp="1585710076729">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="221" y="23" width="1024" height="831" key="SettingsEditor/0.0.1440.900@0.0.1440.900" timestamp="1585710076729" />
+    <state x="100" y="100" width="1240" height="700" key="com.intellij.history.integration.ui.views.DirectoryHistoryDialog" timestamp="1585872474803">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="100" y="100" width="1240" height="700" key="com.intellij.history.integration.ui.views.DirectoryHistoryDialog/0.0.1440.900@0.0.1440.900" timestamp="1585872474803" />
+    <state x="100" y="100" width="1240" height="700" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1585872157868">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="100" y="100" width="1240" height="700" key="com.intellij.history.integration.ui.views.FileHistoryDialog/0.0.1440.900@0.0.1440.900" timestamp="1585872157867" />
+    <state x="100" y="100" width="1240" height="700" key="dock-window-1" timestamp="1585710317891">
+      <screen x="0" y="23" width="1440" height="831" />
+    </state>
+    <state x="100" y="100" width="1240" height="700" key="dock-window-1/0.23.1440.831@0.23.1440.831" timestamp="1585710317891" />
+    <state x="385" y="196" width="670" height="676" key="search.everywhere.popup" timestamp="1585885799537">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="385" y="196" width="670" height="676" key="search.everywhere.popup/0.0.1440.900@0.0.1440.900" timestamp="1585885799537" />
+  </component>
+</project>

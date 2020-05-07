@@ -47,7 +47,7 @@ class DecisionTreeRoot(object):
         self.entropy = (givenEntropy - totalEntropy)
         return totalEntropy
 
-# -----------------------------------------------
+    # -----------------------------------------------
 
     # Calculates total Entropu
     def calcualteTotalEntropy(self):
@@ -57,9 +57,9 @@ class DecisionTreeRoot(object):
             total += child.total
         for child in self.children:
             entropy -= (child.total / total) * math.log((child.total / total), 2)
-            return 1 - self.calculateChildrenEntropy(1)
+        return 1 - self.calculateChildrenEntropy(1)
 
-# -----------------------------------------------
+    # -----------------------------------------------
 
     # * Calculates total information gain
     def calculateChildrenGain(self, t: float):
